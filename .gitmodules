@@ -1,0 +1,3 @@
+[submodule "CONFIG"]
+	path = CONFIG
+	url = git@github.com:h-beeen/vaccgom_config.git
