@@ -1,4 +1,4 @@
-name: Deploy to Develop Environment
+name: 배포 자동화 파이프라인
 
 on:
   push:
@@ -25,5 +25,35 @@ jobs:
       - name: Update Git submodules
         run: git submodule update --remote --recursive
 
-      - name: Build and test with Gradle
-        run: ./gradlew test
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build with Gradle
+        run: ./gradlew clean build --debug
+
+      - name: Get current time
+        uses: 1466587594/get-current-time@v2
+        id: current-time
+        with:
+          format: YYYY-MM-DDTHH-mm-ss
+          utcOffset: "+09:00"
+
+      - name: Show Current Time
+        run: echo "CurrentTime=${{steps.current-time.outputs.formattedTime}}"
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build, tag, and push image to Amazon ECR
+        run: |
+          docker build -t vacgom:${{steps.current-time.outputs.formattedTime}} .
+          docker tag vacgom:${{steps.current-time.outputs.formattedTime}} ${{ secrets.ECR_URI }}:${{steps.current-time.outputs.formattedTime}}
+          docker push ${{ secrets.ECR_URI }}:${{steps.current-time.outputs.formattedTime}}
