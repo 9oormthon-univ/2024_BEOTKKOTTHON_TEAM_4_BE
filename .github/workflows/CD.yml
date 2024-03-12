@@ -57,3 +57,16 @@ jobs:
           docker build -t vacgom:${{steps.current-time.outputs.formattedTime}} .
           docker tag vacgom:${{steps.current-time.outputs.formattedTime}} ${{ secrets.ECR_URI }}:${{steps.current-time.outputs.formattedTime}}
           docker push ${{ secrets.ECR_URI }}:${{steps.current-time.outputs.formattedTime}}
+
+      - name: SSH into EC2 instance
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          port: ${{ secrets.EC2_SSH_PORT }}
+          script: |
+            docker pull ${{ secrets.ECR_URI }}:${{ steps.current-time.outputs.formattedTime }}
+            docker ps -f name=vacgom-api -q | xargs --no-run-if-empty docker container stop
+            docker ps -a -f name=vacgom-api -q | xargs --no-run-if-empty docker container rm
+            docker run -d --name vacgom-api -p 80:8080 ${{ secrets.AWS_ECR_REPO_URI }}:${{ steps.current-time.outputs.formattedTime }}
