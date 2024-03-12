@@ -66,7 +66,8 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           port: ${{ secrets.EC2_SSH_PORT }}
           script: |
+            aws ecr get-login-password | docker login --username AWS --password-stdin ${{ secrets.ECR_URI }}
             docker pull ${{ secrets.ECR_URI }}:${{ steps.current-time.outputs.formattedTime }}
             docker ps -f name=vacgom-api -q | xargs --no-run-if-empty docker container stop
             docker ps -a -f name=vacgom-api -q | xargs --no-run-if-empty docker container rm
-            docker run -d --name vacgom-api -p 80:8080 ${{ secrets.AWS_ECR_REPO_URI }}:${{ steps.current-time.outputs.formattedTime }}
+            docker run -d --name vacgom-api -p 80:8080 ${{ secrets.ECR_URI }}:${{ steps.current-time.outputs.formattedTime }}
