@@ -1,4 +1,4 @@
-package com.vacgom.backend.member.domain
+package com.vacgom.backend.domain.member
 
 import com.vacgom.backend.global.auditing.BaseEntity
 import jakarta.persistence.*
