@@ -1,4 +1,4 @@
-name: 빌드 테스트 / 리뷰어 할당
+name: 빌드 테스트
 
 on:
   pull_request:
@@ -8,12 +8,12 @@ on:
       - 'master'
 
 jobs:
-  build_and_review_assign:
-    name: "[CI] Check Build/Testcases and Assign Reviewer"
+  build:
+    name: "[CI] Check Build"
     runs-on: ubuntu-latest
 
     steps:
-      - name: (Set Up) checkout
+      - name: Checkout code
         uses: actions/checkout@v3
         with:
           token: ${{ secrets.GIT_TOKEN }}
@@ -27,16 +27,3 @@ jobs:
 
       - name: (Set Up) Grant Execute permission for gradlew
         run: chmod 777 gradlew
-
-      - name: (Build) Build with Gradle
-        id: build
-        run: ./gradlew test -i
-
-      - name: (Assign Reviewer)
-        if: steps.build.outcome == 'success'
-        uses: hkusu/review-assign-action@v1
-        with:
-          assignees: ${{ github.actor }}
-          reviewers: HyungJu, h-beeen
-          ready-comment: '코드 리뷰 요청합니다 🙆 <reviewers>'
-          merged-comment: '성공적으로 Merge 되었습니다. Shout out to <reviewers> :wink:'
