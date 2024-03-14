@@ -39,7 +39,7 @@ class ApiExceptionHandlingFilter(
         response.contentType = MediaType.APPLICATION_JSON_VALUE
         response.status = HttpStatus.UNAUTHORIZED.value()
         om.writeValue(response.outputStream, ErrorResponse(exception.errorCode))
-    } catch (ex: IOException) {
-        throw RuntimeException(ex)
+    } catch (exception: IOException) {
+        throw RuntimeException(exception)
     }
 }
