@@ -4,7 +4,7 @@ import com.vacgom.backend.global.exception.error.BusinessException
 import com.vacgom.backend.global.exception.error.ErrorCode
 import com.vacgom.backend.global.exception.error.ErrorResponse
 import com.vacgom.backend.global.exception.error.GlobalError
-import com.vacgom.backend.global.logger.CommonLogger
+import org.slf4j.Logger
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.MethodArgumentNotValidException
@@ -14,9 +14,8 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestControllerAdvice
 
 @RestControllerAdvice
-class ApiExceptionHandler {
-    companion object : CommonLogger();
-
+class ApiExceptionHandler(private var log: Logger) {
+    
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException::class)
     fun handleMethodArgumentNotValidException(ex: MethodArgumentNotValidException): ErrorResponse? {
