@@ -1,8 +1,8 @@
-package com.vacgom.backend.infrastructure.auth.kakao
+package com.vacgom.backend.infrastructure.auth.oauth.kakao
 
-import com.vacgom.backend.domain.auth.AuthUriGenerator
-import com.vacgom.backend.domain.auth.constants.ProviderType
-import com.vacgom.backend.infrastructure.auth.kakao.model.KakaoProperties
+import com.vacgom.backend.domain.auth.oauth.OauthUriGenerator
+import com.vacgom.backend.domain.auth.oauth.constants.ProviderType
+import com.vacgom.backend.infrastructure.auth.oauth.kakao.model.KakaoProperties
 import org.springframework.stereotype.Component
 import org.springframework.web.util.UriComponentsBuilder
 import java.net.URI
@@ -10,7 +10,7 @@ import java.net.URI
 @Component
 class KakaoUriGenerator(
         private val kakaoProperties: KakaoProperties
-) : AuthUriGenerator {
+) : OauthUriGenerator {
 
     override fun isSupported(provider: ProviderType): Boolean {
         return provider.isKakao()

@@ -1,9 +1,11 @@
 package com.vacgom.backend.global.security.jwt
 
 import com.vacgom.backend.application.auth.dto.TokenResponse
+import org.springframework.stereotype.Service
 import java.util.*
 
-class JwtService(
+@Service
+class JwtTokenManager(
         private val jwtProvider: JwtProvider
 ) {
     fun generate(memberId: UUID): TokenResponse {

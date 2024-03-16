@@ -1,10 +1,10 @@
-package com.vacgom.backend.domain.auth
+package com.vacgom.backend.domain.auth.oauth
 
 import com.vacgom.backend.application.auth.dto.KakaoMemberResponse
 import com.vacgom.backend.application.auth.dto.OauthTokenResponse
-import com.vacgom.backend.domain.auth.constants.ProviderType
+import com.vacgom.backend.domain.auth.oauth.constants.ProviderType
 
-interface AuthConnector {
+interface OauthConnector {
     fun isSupported(provider: ProviderType): Boolean
     fun fetchOauthToken(code: String): OauthTokenResponse
     fun fetchMemberInfo(accessToken: String): KakaoMemberResponse

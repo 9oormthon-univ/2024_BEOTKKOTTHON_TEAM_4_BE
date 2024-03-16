@@ -1,12 +1,12 @@
-package com.vacgom.backend.infrastructure.auth.kakao
+package com.vacgom.backend.infrastructure.auth.oauth.kakao
 
 import com.vacgom.backend.application.auth.dto.KakaoMemberResponse
 import com.vacgom.backend.application.auth.dto.OauthTokenResponse
-import com.vacgom.backend.domain.auth.AuthConnector
-import com.vacgom.backend.domain.auth.constants.ProviderType
+import com.vacgom.backend.domain.auth.oauth.OauthConnector
+import com.vacgom.backend.domain.auth.oauth.constants.ProviderType
 import com.vacgom.backend.global.exception.error.BusinessException
 import com.vacgom.backend.global.security.exception.AuthError
-import com.vacgom.backend.infrastructure.auth.kakao.model.KakaoProperties
+import com.vacgom.backend.infrastructure.auth.oauth.kakao.model.KakaoProperties
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
@@ -18,10 +18,10 @@ import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
 
 @Component
-class KakaoAuthConnector(
+class KakaoConnector(
         private val restTemplate: RestTemplate,
         private val kakaoProperties: KakaoProperties
-) : AuthConnector {
+) : OauthConnector {
     override fun isSupported(provider: ProviderType): Boolean {
         return provider.isKakao()
     }

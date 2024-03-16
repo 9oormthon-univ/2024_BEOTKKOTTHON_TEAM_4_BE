@@ -1,7 +1,7 @@
 package com.vacgom.backend.presentation.auth
 
 import com.vacgom.backend.application.auth.AuthService
-import com.vacgom.backend.application.auth.dto.MemberResponse
+import com.vacgom.backend.application.auth.dto.LoginResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -9,7 +9,7 @@ import java.net.URI
 
 @RestController
 @RequestMapping("/api/v1/oauth")
-class AuthController(private val authService: AuthService) {
+class OAuthController(private val authService: AuthService) {
 
     @GetMapping("/{provider}")
     fun redirectToAuthorization(
@@ -24,8 +24,8 @@ class AuthController(private val authService: AuthService) {
     fun login(
             @PathVariable provider: String,
             @RequestParam code: String
-    ): ResponseEntity<MemberResponse> {
-        val tokenResponse = authService.login(provider, code)
-        return ResponseEntity.ok(tokenResponse)
+    ): ResponseEntity<LoginResponse> {
+        val loginResponse = authService.login(provider, code)
+        return ResponseEntity.ok(loginResponse)
     }
 }

@@ -1,18 +1,21 @@
 package com.vacgom.backend.application.auth
 
+import com.vacgom.backend.application.auth.dto.LoginResponse
 import com.vacgom.backend.application.auth.dto.MemberResponse
-import com.vacgom.backend.domain.auth.constants.ProviderType
 import com.vacgom.backend.domain.auth.constants.Role
+import com.vacgom.backend.domain.auth.oauth.constants.ProviderType
 import com.vacgom.backend.domain.member.Member
+import com.vacgom.backend.global.security.jwt.JwtTokenManager
 import com.vacgom.backend.infrastructure.member.persistence.MemberRepository
 import jakarta.transaction.Transactional
 import org.springframework.http.HttpHeaders
-import org.springframework.stereotype.Service
+import org.springframework.stereotype.Component
 import java.net.URI
 
-@Service
+@Component
 class AuthService(
         private val authFactory: AuthFactory,
+        private val jwtTokenManager: JwtTokenManager,
         private val memberRepository: MemberRepository
 ) {
     fun createRedirectHeaders(redirectUri: URI): HttpHeaders {
@@ -29,13 +32,16 @@ class AuthService(
     fun login(
             providerType: String,
             code: String
-    ): MemberResponse {
+    ): LoginResponse {
         val authConnector = authFactory.getAuthConnector(providerType)
         val oauthToken = authConnector.fetchOauthToken(code)
         val memberInfo = authConnector.fetchMemberInfo(oauthToken.accessToken)
         val member = findOrCreateMember(memberInfo.id, ProviderType.from(providerType))
 
-        return MemberResponse(member.id!!, member.role)
+        val memberResponse = MemberResponse(member.id!!, member.role)
+        val tokenResponse = jwtTokenManager.generate(member.id!!)
+
+        return LoginResponse(memberResponse, tokenResponse)
     }
 
     private fun findOrCreateMember(
