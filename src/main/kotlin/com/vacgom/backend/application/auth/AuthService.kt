@@ -1,10 +1,10 @@
 package com.vacgom.backend.application.auth
 
 import com.vacgom.backend.application.auth.dto.MemberResponse
+import com.vacgom.backend.domain.auth.constants.ProviderType
+import com.vacgom.backend.domain.auth.constants.Role
 import com.vacgom.backend.domain.member.Member
-import com.vacgom.backend.domain.member.constants.ProviderType
-import com.vacgom.backend.domain.member.constants.Role
-import com.vacgom.backend.infrastructure.member.MemberRepository
+import com.vacgom.backend.infrastructure.member.persistence.MemberRepository
 import jakarta.transaction.Transactional
 import org.springframework.http.HttpHeaders
 import org.springframework.stereotype.Service

@@ -1,6 +1,6 @@
-package com.vacgom.backend.infrastructure.member
+package com.vacgom.backend.infrastructure.auth.persistence
 
-import com.vacgom.backend.domain.member.RefreshToken
+import com.vacgom.backend.domain.auth.RefreshToken
 import org.springframework.data.jpa.repository.JpaRepository
 import java.util.*
 

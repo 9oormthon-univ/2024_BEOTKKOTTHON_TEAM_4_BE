@@ -4,4 +4,4 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonNaming
 
 @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy::class)
-data class OauthToken(val accessToken: String)
+data class OauthTokenResponse(val accessToken: String)

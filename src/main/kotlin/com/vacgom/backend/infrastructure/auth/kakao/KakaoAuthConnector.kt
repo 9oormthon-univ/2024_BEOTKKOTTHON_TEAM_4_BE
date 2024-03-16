@@ -1,12 +1,12 @@
 package com.vacgom.backend.infrastructure.auth.kakao
 
-import com.vacgom.backend.application.auth.dto.OauthToken
-import com.vacgom.backend.application.auth.property.KakaoProperties
+import com.vacgom.backend.application.auth.dto.KakaoMemberResponse
+import com.vacgom.backend.application.auth.dto.OauthTokenResponse
 import com.vacgom.backend.domain.auth.AuthConnector
-import com.vacgom.backend.domain.member.constants.ProviderType
+import com.vacgom.backend.domain.auth.constants.ProviderType
 import com.vacgom.backend.global.exception.error.BusinessException
 import com.vacgom.backend.global.security.exception.AuthError
-import com.vacgom.backend.infrastructure.auth.kakao.model.KakaoMemberInfo
+import com.vacgom.backend.infrastructure.auth.kakao.model.KakaoProperties
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
@@ -26,7 +26,7 @@ class KakaoAuthConnector(
         return provider.isKakao()
     }
 
-    override fun fetchOauthToken(code: String): OauthToken {
+    override fun fetchOauthToken(code: String): OauthTokenResponse {
         val headers = createHttpHeaders()
         val body: MultiValueMap<String, String> = LinkedMultiValueMap()
 
@@ -41,14 +41,14 @@ class KakaoAuthConnector(
             restTemplate.postForObject(
                     kakaoProperties.tokenEndpoint!!,
                     request,
-                    OauthToken::class.java
+                    OauthTokenResponse::class.java
             )!!
         } catch (exception: RestClientException) {
             throw BusinessException(AuthError.KAKAO_OAUTH_ERROR)
         }
     }
 
-    override fun fetchMemberInfo(accessToken: String): KakaoMemberInfo {
+    override fun fetchMemberInfo(accessToken: String): KakaoMemberResponse {
         val headers = createHttpHeaders()
         headers.set("Authorization", "Bearer $accessToken")
 
@@ -58,7 +58,7 @@ class KakaoAuthConnector(
                     kakaoProperties.userinfoEndpoint!!,
                     HttpMethod.GET,
                     request,
-                    KakaoMemberInfo::class.java
+                    KakaoMemberResponse::class.java
             ).body ?: throw BusinessException(AuthError.KAKAO_OAUTH_ERROR)
         } catch (exception: RestClientException) {
             println("e = ${exception}")

@@ -1,4 +1,4 @@
-package com.vacgom.backend.application.auth.property
+package com.vacgom.backend.infrastructure.auth.kakao.model
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component

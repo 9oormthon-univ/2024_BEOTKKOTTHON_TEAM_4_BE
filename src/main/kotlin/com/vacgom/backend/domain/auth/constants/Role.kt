@@ -1,4 +1,4 @@
-package com.vacgom.backend.domain.member.constants
+package com.vacgom.backend.domain.auth.constants
 
 enum class Role {
     ROLE_TEMP_USER,

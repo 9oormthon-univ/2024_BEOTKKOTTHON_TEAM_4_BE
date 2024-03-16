@@ -1,7 +1,7 @@
 package com.vacgom.backend.domain.member
 
-import com.vacgom.backend.domain.member.constants.ProviderType
-import com.vacgom.backend.domain.member.constants.Role
+import com.vacgom.backend.domain.auth.constants.ProviderType
+import com.vacgom.backend.domain.auth.constants.Role
 import com.vacgom.backend.global.auditing.BaseEntity
 import jakarta.persistence.*
 import org.hibernate.annotations.GenericGenerator
@@ -20,6 +20,6 @@ class Member(
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @Column(columnDefinition = "BINARY(16)", name = "member_id")
     var id: UUID? = null
-    
+
     var name: String? = null
 }

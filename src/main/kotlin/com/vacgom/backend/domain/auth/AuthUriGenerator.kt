@@ -1,6 +1,6 @@
 package com.vacgom.backend.domain.auth
 
-import com.vacgom.backend.domain.member.constants.ProviderType
+import com.vacgom.backend.domain.auth.constants.ProviderType
 import java.net.URI
 
 interface AuthUriGenerator {

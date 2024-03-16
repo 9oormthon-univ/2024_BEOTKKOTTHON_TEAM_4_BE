@@ -1,4 +1,4 @@
-package com.vacgom.backend.domain.member.constants
+package com.vacgom.backend.domain.auth.constants
 
 import com.vacgom.backend.global.exception.error.BusinessException
 import com.vacgom.backend.global.security.exception.AuthError

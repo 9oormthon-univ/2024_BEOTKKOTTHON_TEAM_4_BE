@@ -1,7 +1,7 @@
-package com.vacgom.backend.infrastructure.member
+package com.vacgom.backend.infrastructure.member.persistence
 
+import com.vacgom.backend.domain.auth.constants.ProviderType
 import com.vacgom.backend.domain.member.Member
-import com.vacgom.backend.domain.member.constants.ProviderType
 import org.springframework.data.jpa.repository.JpaRepository
 import java.util.*
 

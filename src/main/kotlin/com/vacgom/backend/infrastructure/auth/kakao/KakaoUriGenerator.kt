@@ -1,8 +1,8 @@
 package com.vacgom.backend.infrastructure.auth.kakao
 
-import com.vacgom.backend.application.auth.property.KakaoProperties
 import com.vacgom.backend.domain.auth.AuthUriGenerator
-import com.vacgom.backend.domain.member.constants.ProviderType
+import com.vacgom.backend.domain.auth.constants.ProviderType
+import com.vacgom.backend.infrastructure.auth.kakao.model.KakaoProperties
 import org.springframework.stereotype.Component
 import org.springframework.web.util.UriComponentsBuilder
 import java.net.URI

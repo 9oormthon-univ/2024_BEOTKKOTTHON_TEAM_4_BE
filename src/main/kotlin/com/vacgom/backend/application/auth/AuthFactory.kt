@@ -2,7 +2,7 @@ package com.vacgom.backend.application.auth
 
 import com.vacgom.backend.domain.auth.AuthConnector
 import com.vacgom.backend.domain.auth.AuthUriGenerator
-import com.vacgom.backend.domain.member.constants.ProviderType
+import com.vacgom.backend.domain.auth.constants.ProviderType
 import com.vacgom.backend.global.exception.error.BusinessException
 import com.vacgom.backend.global.security.exception.AuthError
 import org.springframework.stereotype.Component

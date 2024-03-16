@@ -1,5 +1,6 @@
-package com.vacgom.backend.domain.member
+package com.vacgom.backend.domain.auth
 
+import com.vacgom.backend.domain.member.Member
 import jakarta.persistence.*
 import java.time.LocalDateTime
 
