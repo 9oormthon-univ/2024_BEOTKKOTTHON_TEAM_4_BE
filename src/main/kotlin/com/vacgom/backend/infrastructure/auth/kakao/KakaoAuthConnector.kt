@@ -1,11 +1,11 @@
 package com.vacgom.backend.infrastructure.auth.kakao
 
 import com.vacgom.backend.application.auth.dto.AuthTokenResponse
+import com.vacgom.backend.application.auth.property.KakaoProperties
 import com.vacgom.backend.domain.auth.AuthConnector
 import com.vacgom.backend.domain.auth.model.AuthProvider
 import com.vacgom.backend.global.exception.error.BusinessException
 import com.vacgom.backend.global.security.exception.AuthError
-import com.vacgom.backend.presentation.auth.KakaoProperty
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
@@ -18,7 +18,7 @@ import org.springframework.web.client.RestTemplate
 @Component
 class KakaoAuthConnector(
         private val restTemplate: RestTemplate,
-        private val property: KakaoProperty
+        private val kakaoProperties: KakaoProperties
 ) : AuthConnector {
     companion object {
         val GRANT_TYPE: String = "authorization_code"
@@ -34,15 +34,15 @@ class KakaoAuthConnector(
         val body: MultiValueMap<String, String> = LinkedMultiValueMap()
 
         body.add("grant_type", GRANT_TYPE)
-        body.add("client_id", property.clientId)
-        body.add("client_secret", property.clientSecret)
-        body.add("redirect_uri", property.redirectUri)
+        body.add("client_id", kakaoProperties.clientId)
+        body.add("client_secret", kakaoProperties.clientSecret)
+        body.add("redirect_uri", kakaoProperties.redirectUri)
         body.add("code", code)
 
         val request = HttpEntity<MultiValueMap<String, String>>(body, headers)
         return try {
             restTemplate.postForObject(
-                    property.tokenEndPoint,
+                    kakaoProperties.tokenEndpoint!!,
                     request,
                     AuthTokenResponse::class.java
             )!!
