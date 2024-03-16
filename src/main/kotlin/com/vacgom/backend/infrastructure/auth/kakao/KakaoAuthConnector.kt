@@ -1,13 +1,15 @@
 package com.vacgom.backend.infrastructure.auth.kakao
 
-import com.vacgom.backend.application.auth.dto.AuthTokenResponse
+import com.vacgom.backend.application.auth.dto.OauthToken
 import com.vacgom.backend.application.auth.property.KakaoProperties
 import com.vacgom.backend.domain.auth.AuthConnector
-import com.vacgom.backend.domain.auth.model.AuthProvider
+import com.vacgom.backend.domain.member.constants.ProviderType
 import com.vacgom.backend.global.exception.error.BusinessException
 import com.vacgom.backend.global.security.exception.AuthError
+import com.vacgom.backend.infrastructure.auth.kakao.model.KakaoMemberInfo
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpMethod
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
 import org.springframework.util.LinkedMultiValueMap
@@ -20,40 +22,50 @@ class KakaoAuthConnector(
         private val restTemplate: RestTemplate,
         private val kakaoProperties: KakaoProperties
 ) : AuthConnector {
-    companion object {
-        val GRANT_TYPE: String = "authorization_code"
-        val BEARER: String = "Bearer "
-    }
-
-    override fun isSupported(provider: AuthProvider): Boolean {
+    override fun isSupported(provider: ProviderType): Boolean {
         return provider.isKakao()
     }
 
-    override fun fetchAccessToken(code: String): AuthTokenResponse {
+    override fun fetchOauthToken(code: String): OauthToken {
         val headers = createHttpHeaders()
         val body: MultiValueMap<String, String> = LinkedMultiValueMap()
 
-        body.add("grant_type", GRANT_TYPE)
+        body.add("grant_type", "authorization_code")
         body.add("client_id", kakaoProperties.clientId)
-        body.add("client_secret", kakaoProperties.clientSecret)
         body.add("redirect_uri", kakaoProperties.redirectUri)
         body.add("code", code)
+        body.add("client_secret", kakaoProperties.clientSecret)
 
         val request = HttpEntity<MultiValueMap<String, String>>(body, headers)
         return try {
             restTemplate.postForObject(
                     kakaoProperties.tokenEndpoint!!,
                     request,
-                    AuthTokenResponse::class.java
+                    OauthToken::class.java
             )!!
         } catch (exception: RestClientException) {
             throw BusinessException(AuthError.KAKAO_OAUTH_ERROR)
         }
     }
 
-    override fun fetchMemberInfo(accessToken: String) {
-        TODO("Not yet implemented")
+    override fun fetchMemberInfo(accessToken: String): KakaoMemberInfo {
+        val headers = createHttpHeaders()
+        headers.set("Authorization", "Bearer $accessToken")
+
+        val request: HttpEntity<*> = HttpEntity<Any>(headers)
+        return try {
+            restTemplate.exchange(
+                    kakaoProperties.userinfoEndpoint!!,
+                    HttpMethod.GET,
+                    request,
+                    KakaoMemberInfo::class.java
+            ).body ?: throw BusinessException(AuthError.KAKAO_OAUTH_ERROR)
+        } catch (exception: RestClientException) {
+            println("e = ${exception}")
+            throw BusinessException(AuthError.KAKAO_OAUTH_ERROR)
+        }
     }
+
 
     private fun createHttpHeaders(): HttpHeaders {
         val headers = HttpHeaders()

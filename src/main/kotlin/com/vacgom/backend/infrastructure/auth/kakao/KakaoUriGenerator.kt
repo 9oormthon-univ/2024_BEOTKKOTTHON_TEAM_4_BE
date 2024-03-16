@@ -2,7 +2,7 @@ package com.vacgom.backend.infrastructure.auth.kakao
 
 import com.vacgom.backend.application.auth.property.KakaoProperties
 import com.vacgom.backend.domain.auth.AuthUriGenerator
-import com.vacgom.backend.domain.auth.model.AuthProvider
+import com.vacgom.backend.domain.member.constants.ProviderType
 import org.springframework.stereotype.Component
 import org.springframework.web.util.UriComponentsBuilder
 import java.net.URI
@@ -12,7 +12,7 @@ class KakaoUriGenerator(
         private val kakaoProperties: KakaoProperties
 ) : AuthUriGenerator {
 
-    override fun isSupported(provider: AuthProvider): Boolean {
+    override fun isSupported(provider: ProviderType): Boolean {
         return provider.isKakao()
     }
 
@@ -25,5 +25,4 @@ class KakaoUriGenerator(
                 .build()
                 .toUri()
     }
-
 }

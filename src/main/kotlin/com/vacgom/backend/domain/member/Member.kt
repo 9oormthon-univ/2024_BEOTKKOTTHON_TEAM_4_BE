@@ -10,10 +10,9 @@ import java.util.*
 @Entity
 @Table(name = "t_member")
 class Member(
-        var name: String,
-        var providerId: String,
+        var providerId: Long,
         @Enumerated(EnumType.STRING) var providerType: ProviderType,
-        @Enumerated(EnumType.STRING) var role: Role
+        @Enumerated(EnumType.STRING) var role: Role,
 ) : BaseEntity() {
 
     @Id
@@ -21,4 +20,6 @@ class Member(
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @Column(columnDefinition = "BINARY(16)", name = "member_id")
     var id: UUID? = null
+    
+    var name: String? = null
 }
