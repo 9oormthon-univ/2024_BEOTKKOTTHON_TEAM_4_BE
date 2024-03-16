@@ -1,8 +1,13 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+val activeProfile = System.getenv("PROFILE") ?: "dev"
+val imageTag = System.getenv("IMAGE_TAG") ?: "latest"
+val repoURL: String? = System.getenv("IMAGE_REPO_URL")
+
 plugins {
 	id("org.springframework.boot") version "3.2.3"
 	id("io.spring.dependency-management") version "1.1.4"
+	id("com.google.cloud.tools.jib") version "3.4.1"
 	kotlin("jvm") version "1.9.22"
 	kotlin("plugin.spring") version "1.9.22"
 	kotlin("plugin.jpa") version "1.9.22"
@@ -55,4 +60,22 @@ tasks.register<Copy>("initConfig") {
 	from("./CONFIG")
 	include("*.yml")
 	into("./src/main/resources")
+}
+
+jib {
+	from {
+		image = "amazoncorretto:17-alpine3.18"
+	}
+	to {
+		image = repoURL
+		tags = setOf(imageTag)
+	}
+	container {
+		jvmFlags = listOf(
+			"-Dspring.profiles.active=${activeProfile}",
+			"-Dserver.port=8080",
+			"-XX:+UseContainerSupport",
+		)
+		ports = listOf("8080")
+	}
 }
