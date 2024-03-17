@@ -48,10 +48,7 @@ class AuthService(
             kakaoProviderId: Long,
             providerType: ProviderType
     ): Member {
-        val existingMember = memberRepository.findByProviderIdAndProviderType(kakaoProviderId, providerType)
-        return existingMember ?: run {
-            val newMember = Member(kakaoProviderId, providerType, Role.ROLE_TEMP_USER)
-            memberRepository.save(newMember)
-        }
+        return memberRepository.findByProviderIdAndProviderType(kakaoProviderId, providerType)
+                ?: memberRepository.save(Member(kakaoProviderId, providerType, Role.ROLE_TEMP_USER))
     }
 }

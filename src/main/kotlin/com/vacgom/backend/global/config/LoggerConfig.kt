@@ -10,6 +10,6 @@ class LoggerConfig {
 
     @Bean
     fun logger(): Logger {
-        return LoggerFactory.getLogger(this.javaClass)!!
+        return LoggerFactory.getLogger(this.javaClass)
     }
 }

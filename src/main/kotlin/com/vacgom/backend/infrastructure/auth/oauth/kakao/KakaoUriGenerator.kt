@@ -18,7 +18,7 @@ class KakaoUriGenerator(
 
     override fun generate(): URI {
         return UriComponentsBuilder
-                .fromUriString(kakaoProperties.authorizationEndpoint!!)
+                .fromUriString(kakaoProperties.authorizationEndpoint)
                 .queryParam("response_type", "code")
                 .queryParam("client_id", kakaoProperties.clientId)
                 .queryParam("redirect_uri", kakaoProperties.redirectUri)

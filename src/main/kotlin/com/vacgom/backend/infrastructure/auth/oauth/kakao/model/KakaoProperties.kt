@@ -5,10 +5,11 @@ import org.springframework.stereotype.Component
 
 @Component
 data class KakaoProperties(
-        @Value("\${spring.security.oauth2.client.registration.kakao.client-id}") var clientId: String? = null,
-        @Value("\${spring.security.oauth2.client.registration.kakao.client-secret}") var clientSecret: String? = null,
-        @Value("\${spring.security.oauth2.client.registration.kakao.redirect-uri}") var redirectUri: String? = null,
-        @Value("\${spring.security.oauth2.client.provider.kakao.authorization-endpoint}") var authorizationEndpoint: String? = null,
-        @Value("\${spring.security.oauth2.client.provider.kakao.token-endpoint}") var tokenEndpoint: String? = null,
-        @Value("\${spring.security.oauth2.client.provider.kakao.user-info-endpoint}") var userinfoEndpoint: String? = null
+        @Value("\${spring.security.oauth2.client.registration.kakao.client-id}") val clientId: String,
+        @Value("\${spring.security.oauth2.client.registration.kakao.client-secret}") val clientSecret: String,
+        @Value("\${spring.security.oauth2.client.registration.kakao.redirect-uri}") val redirectUri: String,
+        @Value("\${spring.security.oauth2.client.registration.kakao.authorization-grant-type}") val authorizationGrantType: String,
+        @Value("\${spring.security.oauth2.client.provider.kakao.authorization-endpoint}") val authorizationEndpoint: String,
+        @Value("\${spring.security.oauth2.client.provider.kakao.token-endpoint}") val tokenEndpoint: String,
+        @Value("\${spring.security.oauth2.client.provider.kakao.user-info-endpoint}") val userinfoEndpoint: String
 )

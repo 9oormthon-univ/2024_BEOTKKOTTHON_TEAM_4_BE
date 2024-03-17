@@ -5,7 +5,6 @@ import com.vacgom.backend.global.security.exception.AuthError
 import io.jsonwebtoken.*
 import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.security.Keys
-import io.jsonwebtoken.security.SecurityException
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import java.security.Key
@@ -57,15 +56,7 @@ class JwtProvider(
                     .setSigningKey(secretKey)
                     .build()
                     .parseClaimsJws(token)
-        } catch (exception: ExpiredJwtException) {
-            throw BusinessException(AuthError.EXPIRED_JWT_TOKEN)
-        } catch (exception: SecurityException) {
-            throw BusinessException(AuthError.EXPIRED_JWT_TOKEN)
-        } catch (exception: MalformedJwtException) {
-            throw BusinessException(AuthError.EXPIRED_JWT_TOKEN)
-        } catch (exception: UnsupportedJwtException) {
-            throw BusinessException(AuthError.EXPIRED_JWT_TOKEN)
-        } catch (exception: IllegalArgumentException) {
+        } catch (exception: JwtException) {
             throw BusinessException(AuthError.EXPIRED_JWT_TOKEN)
         }
     }
