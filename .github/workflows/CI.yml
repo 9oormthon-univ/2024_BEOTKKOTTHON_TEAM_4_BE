@@ -1,29 +1,29 @@
-name: 빌드 테스트 / 리뷰어 할당
+name: 테스트 코드 및 빌드
 
 on:
   pull_request:
-    types: [opened, synchronize, closed]
+    types: [ opened, synchronize, closed ]
     branches:
       - 'develop'
       - 'master'
 
 jobs:
-  build_and_review_assign:
-    name: "[CI] Check Build/Testcases and Assign Reviewer"
+  test:
+    name: "[CI] Check Tests"
     runs-on: ubuntu-latest
 
     steps:
-      - name: (Set Up) checkout
+      - name: Checkout code
         uses: actions/checkout@v3
         with:
           token: ${{ secrets.GIT_TOKEN }}
           submodules: true
 
-      - name: (Set Up) Set up JDK 17
+      - name: Setup Java 17
         uses: actions/setup-java@v3
         with:
           java-version: '17'
-          distribution: 'temurin'
+          distribution: 'adopt'
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
@@ -31,15 +31,8 @@ jobs:
       - name: (Set Up) Grant Execute permission for gradlew
         run: chmod 777 gradlew
 
-      - name: (Build) Build with Gradle
-        id: build
-        run: ./gradlew test -i
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
 
-      - name: (Assign Reviewer)
-        if: steps.build.outcome == 'success'
-        uses: hkusu/review-assign-action@v1
-        with:
-          assignees: ${{ github.actor }}
-          reviewers: HyungJu, h-beeen
-          ready-comment: '코드 리뷰 요청합니다 🙆 <reviewers>'
-          merged-comment: '성공적으로 Merge 되었습니다. Shout out to <reviewers> :wink:'
+      - name: Test with Gradle
+        run: ./gradlew test
