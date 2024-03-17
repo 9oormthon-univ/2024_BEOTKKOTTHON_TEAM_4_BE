@@ -69,6 +69,16 @@ jobs:
           service: vacgom-best-service
           cluster: vacgom-cluster
           wait-for-service-stability: true
+      - name: Send Slack notification
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          author_name: 백곰
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        if: always()
+          
   deploy_develop:
     runs-on: ubuntu-latest
     name: Deploy to Amazon ECS (develop)
@@ -126,3 +136,12 @@ jobs:
           service: vacgom-service-dev
           cluster: vacgom-cluster
           wait-for-service-stability: true
+      - name: Send Slack notification
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          author_name: 백곰
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        if: always()
