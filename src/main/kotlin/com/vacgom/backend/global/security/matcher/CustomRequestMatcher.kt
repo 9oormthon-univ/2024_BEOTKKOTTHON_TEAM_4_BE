@@ -10,6 +10,7 @@ class CustomRequestMatcher {
 
     fun authEndpoints(): RequestMatcher {
         return OrRequestMatcher(
+                AntPathRequestMatcher("/"),
                 AntPathRequestMatcher("/api/v1/oauth/**")
         )
     }
