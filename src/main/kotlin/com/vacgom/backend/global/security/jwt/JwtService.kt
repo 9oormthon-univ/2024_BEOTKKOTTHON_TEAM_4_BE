@@ -16,7 +16,6 @@ import org.springframework.security.core.userdetails.User
 import org.springframework.stereotype.Service
 import java.security.Key
 import java.util.*
-import java.util.stream.Collectors
 
 
 @Service
@@ -57,24 +56,12 @@ class JwtService(
             throw BusinessException(AuthError.UNSUPPORTED_JWT_TOKEN)
         }
     }
-
-    fun validateToken(token: String) {
-        getTokenClaims(token)
-    }
-
-    fun getPayload(token: String): UUID? {
-        return UUID.fromString(
-                getTokenClaims(token)
-                        .body
-                        .subject
-                        .toString())
-    }
-
+    
     fun getAuthentication(token: String): Authentication? {
         val claims: Claims = getTokenClaims(token).body
         val authorities = Arrays.stream<String>(arrayOf<String>(claims["role"].toString()))
-                .map<SimpleGrantedAuthority?> { role: String? -> SimpleGrantedAuthority(role) }
-                .collect(Collectors.toList<SimpleGrantedAuthority?>())
+                .map { role: String? -> SimpleGrantedAuthority(role) }
+                .toList()
         val principal: User = CustomUser(UUID.fromString(claims.subject), claims.subject, "", authorities)
         return UsernamePasswordAuthenticationToken(principal, this, authorities)
     }
