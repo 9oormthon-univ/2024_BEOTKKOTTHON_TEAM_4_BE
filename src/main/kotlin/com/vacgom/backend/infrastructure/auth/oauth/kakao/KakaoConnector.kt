@@ -28,14 +28,14 @@ class KakaoConnector(
     override fun fetchOauthToken(code: String): OauthTokenResponse {
         val headers = createHttpHeaders()
         val body = LinkedMultiValueMap<String, String>()
-        
+
         body.add("grant_type", kakaoProperties.authorizationGrantType)
         body.add("client_id", kakaoProperties.clientId)
         body.add("redirect_uri", kakaoProperties.redirectUri)
         body.add("client_secret", kakaoProperties.clientSecret)
         body.add("code", code)
 
-        val request = HttpEntity<Unit>(headers)
+        val request = HttpEntity<LinkedMultiValueMap<String, String>>(body, headers)
 
         return try {
             restTemplate.postForObject(
@@ -52,23 +52,21 @@ class KakaoConnector(
         val headers = createHttpHeaders()
         headers.set("Authorization", "Bearer $accessToken")
 
-        val request: HttpEntity<*> = HttpEntity<Any>(headers)
-        return try {
+        val request = HttpEntity<Unit>(headers)
+        return runCatching {
             restTemplate.exchange(
                     kakaoProperties.userinfoEndpoint,
                     HttpMethod.GET,
                     request,
                     ResourceIdResponse::class.java
-            ).body ?: throw BusinessException(AuthError.KAKAO_OAUTH_ERROR)
-        } catch (exception: RestClientException) {
-            throw BusinessException(AuthError.KAKAO_OAUTH_ERROR)
-        }
+            ).body
+        }.getOrNull() ?: throw BusinessException(AuthError.KAKAO_OAUTH_ERROR)
     }
+}
 
 
-    private fun createHttpHeaders(): HttpHeaders {
-        val headers = HttpHeaders()
-        headers.contentType = MediaType.APPLICATION_FORM_URLENCODED
-        return headers
-    }
+private fun createHttpHeaders(): HttpHeaders {
+    val headers = HttpHeaders()
+    headers.contentType = MediaType.APPLICATION_FORM_URLENCODED
+    return headers
 }

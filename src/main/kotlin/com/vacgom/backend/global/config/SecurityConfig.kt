@@ -1,9 +1,11 @@
 package com.vacgom.backend.global.config
 
 import com.vacgom.backend.global.exception.ApiExceptionHandlingFilter
+import com.vacgom.backend.global.security.filter.JwtAuthFilter
 import com.vacgom.backend.global.security.matcher.CustomRequestMatcher
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.core.annotation.Order
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer
@@ -19,10 +21,12 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 @EnableWebSecurity
 class SecurityConfig(
         private val customRequestMatcher: CustomRequestMatcher,
+        private val jwtAuthFilter: JwtAuthFilter,
         private val apiExceptionHandlingFilter: ApiExceptionHandlingFilter
 ) {
 
     @Bean
+    @Order(0)
     fun authFilterChain(http: HttpSecurity): SecurityFilterChain {
         http.securityMatchers { matcher -> matcher.requestMatchers(customRequestMatcher.authEndpoints()) }
         http.authorizeHttpRequests { auth -> auth.anyRequest().permitAll() }
@@ -31,14 +35,25 @@ class SecurityConfig(
         return commonHttpSecurity(http).build()
     }
 
+    @Bean
+    @Order(1)
+    fun anyRequestFilterChain(http: HttpSecurity): SecurityFilterChain {
+        http.authorizeRequests { auth ->
+            auth.requestMatchers(customRequestMatcher.tempUserEndpoints()).hasRole("TEMP_USER")
+                    .anyRequest().hasRole("USER")
+        }
+                .addFilterAfter(jwtAuthFilter, UsernamePasswordAuthenticationFilter::class.java)
+                .addFilterBefore(apiExceptionHandlingFilter, UsernamePasswordAuthenticationFilter::class.java)
 
-    @Throws(Exception::class)
+        return commonHttpSecurity(http).build()
+    }
+
     private fun commonHttpSecurity(http: HttpSecurity): HttpSecurity {
         return http
-                .csrf { obj: CsrfConfigurer<HttpSecurity> -> obj.disable() }
+                .csrf { csrf: CsrfConfigurer<HttpSecurity> -> csrf.disable() }
                 .cors { corsConfigurationSource() }
-                .formLogin { obj: FormLoginConfigurer<HttpSecurity> -> obj.disable() }
-                .httpBasic { obj: HttpBasicConfigurer<HttpSecurity> -> obj.disable() }
+                .formLogin { formLogin: FormLoginConfigurer<HttpSecurity> -> formLogin.disable() }
+                .httpBasic { basic: HttpBasicConfigurer<HttpSecurity> -> basic.disable() }
     }
 
     @Bean
