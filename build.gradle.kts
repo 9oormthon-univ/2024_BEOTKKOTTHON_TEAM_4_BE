@@ -1,12 +1,17 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+val activeProfile = System.getenv("PROFILE") ?: "dev"
+val imageTag = System.getenv("IMAGE_TAG") ?: "latest"
+val repoURL: String? = System.getenv("IMAGE_REPO_URL")
+
 plugins {
     id("org.springframework.boot") version "3.2.3"
     id("io.spring.dependency-management") version "1.1.4"
-    kotlin("jvm") version "1.9.23"
-    kotlin("plugin.spring") version "1.9.23"
-    kotlin("plugin.jpa") version "1.9.23"
-    kotlin("plugin.allopen") version "1.9.23"
+    id("com.google.cloud.tools.jib") version "3.4.1"
+    kotlin("jvm") version "1.9.22"
+    kotlin("plugin.spring") version "1.9.22"
+    kotlin("plugin.jpa") version "1.9.22"
+    kotlin("plugin.allopen") version "1.9.22"
 }
 
 group = "com.vacgom"
@@ -25,6 +30,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
+
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.flywaydb:flyway-core")
     implementation("org.flywaydb:flyway-mysql")
@@ -33,6 +39,7 @@ dependencies {
     runtimeOnly("com.mysql:mysql-connector-j")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
+
     implementation("io.jsonwebtoken:jjwt-api:0.11.5")
     implementation("io.jsonwebtoken:jjwt-gson:0.11.5")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
@@ -60,6 +67,20 @@ tasks.register<Copy>("initConfig") {
     into("./src/main/resources")
 }
 
-allOpen {
-    annotation("jakarta.persistence.Entity")
+jib {
+    from {
+        image = "amazoncorretto:17-alpine3.18"
+    }
+    to {
+        image = repoURL
+        tags = setOf(imageTag)
+    }
+    container {
+        jvmFlags = listOf(
+                "-Dspring.profiles.active=${activeProfile}",
+                "-Dserver.port=8080",
+                "-XX:+UseContainerSupport",
+        )
+        ports = listOf("8080")
+    }
 }
