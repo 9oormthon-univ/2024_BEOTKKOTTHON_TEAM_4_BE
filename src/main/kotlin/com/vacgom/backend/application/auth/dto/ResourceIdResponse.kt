@@ -1,5 +1,5 @@
 package com.vacgom.backend.application.auth.dto
 
-data class KakaoMemberResponse(
+data class ResourceIdResponse(
         var id: Long
 )
