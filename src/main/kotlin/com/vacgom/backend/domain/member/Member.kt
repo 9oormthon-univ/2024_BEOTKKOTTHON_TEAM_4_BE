@@ -2,9 +2,11 @@ package com.vacgom.backend.domain.member
 
 import com.vacgom.backend.domain.auth.constants.Role
 import com.vacgom.backend.domain.auth.oauth.constants.ProviderType
+import com.vacgom.backend.domain.member.constants.Sex
 import com.vacgom.backend.global.auditing.BaseEntity
 import jakarta.persistence.*
 import org.hibernate.annotations.GenericGenerator
+import java.time.LocalDate
 import java.util.*
 
 @Entity
@@ -22,4 +24,16 @@ class Member(
     val id: UUID? = null
 
     var name: String? = null
+        private set
+
+    var birthday: LocalDate? = null
+        private set
+
+    @Enumerated(EnumType.STRING)
+    var sex: Sex? = null
+        private set
+
+    @Embedded
+    var vacgomId: VacgomId? = null
+        private set
 }
