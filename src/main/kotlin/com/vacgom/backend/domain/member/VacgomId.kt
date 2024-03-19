@@ -11,6 +11,7 @@ class VacgomId(
 ) {
     companion object {
         private const val VACGOM_ID_REGEX = "[a-z0-9_]+"
+        private const val START_WITH_LOWER_CASE_REGEX = "^[a-z].*"
         private const val CONSECUTIVE_UNDERSCORES = "____"
         private const val MINIMUM_LENGTH = 1
         private const val MAXIMUM_LENGTH = 20
@@ -21,6 +22,9 @@ class VacgomId(
     }
 
     private fun validatePattern(id: String) {
+        require(id.matches(START_WITH_LOWER_CASE_REGEX.toRegex())) {
+            throw BusinessException(VacgomIdError.NOT_START_WITH_LOWER_CASE)
+        }
         require(id.matches(VACGOM_ID_REGEX.toRegex())) {
             throw BusinessException(VacgomIdError.INVALID_VACGOM_ID_PATTERN)
         }
