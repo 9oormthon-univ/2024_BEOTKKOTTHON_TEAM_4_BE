@@ -12,7 +12,7 @@ enum class Vaccination(
     BCG("결핵", "BCG(피내용)", 1, 1),
     HEPB("B형간염", "HepB", 1, 3),
     DTAP("디프테리아·파상풍·백일해", "DTaP", 1, 5),
-    TDAP("디프테리아·파상풍·백일해", "Tdap", 6, 6),
+    TDAP("디프테리아·파상풍·백일해", "Tda", 6, 6),
     IPV("폴리오", "IPV", 1, 4),
     HIB("b형헤모필루스인플루엔자", "Hib", 1, 4),
     PCV("폐렴구균", "PCV", 1, 4),
@@ -25,7 +25,8 @@ enum class Vaccination(
     HPV("사람유두종바이러스감염증", "HPV", 1, 3),
     IIV("인플루엔자", "IIV", 1, Long.MAX_VALUE),
     HPV9("사람유두종바이러스감염증", "HPV9(가다실9)", 1, 3),
-    COVID19("코로나19", "COVID19", 1, 3);
+    COVID19("코로나19", "COVID19", 1, 3),
+    MCV4("수막구균", "MCV(4가)", 1, 1);
 
     companion object {
         fun getVaccinationByName(vaccineName: String): Vaccination {
