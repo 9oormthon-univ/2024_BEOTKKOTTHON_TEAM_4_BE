@@ -2,6 +2,7 @@ package com.vacgom.backend.domain.member
 
 import com.vacgom.backend.domain.auth.constants.Role
 import com.vacgom.backend.domain.auth.oauth.constants.ProviderType
+import com.vacgom.backend.domain.vaccine.Inoculation
 import com.vacgom.backend.global.auditing.BaseEntity
 import jakarta.persistence.*
 import org.hibernate.annotations.GenericGenerator
@@ -25,6 +26,13 @@ class Member(
 
     @Embedded
     var nickname: Nickname? = null
+
+    @OneToMany(mappedBy = "member")
+    val inoculations: MutableList<Inoculation> = mutableListOf()
+
+    fun addInoculation(inoculation: Inoculation) {
+        inoculations.add(inoculation)
+    }
 
     fun updateMemberDetails(memberDetails: MemberDetails) {
         this.memberDetails = memberDetails
