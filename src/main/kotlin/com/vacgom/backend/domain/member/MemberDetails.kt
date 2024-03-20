@@ -9,25 +9,18 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 @Embeddable
-class MemberDetails {
-    var name: String? = null
+class MemberDetails(
+        var name: String,
 
-    @JsonFormat(
-            shape = JsonFormat.Shape.STRING,
-            pattern = "yyyy-MM-dd"
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+        var birthday: LocalDate,
+
+        @Enumerated(EnumType.STRING)
+        var sex: Sex
+) {
+    constructor(name: String, birthday: String, sex: String) : this(
+            name,
+            LocalDate.parse(birthday, DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+            Sex.valueOf(sex)
     )
-    var birthday: LocalDate? = null
-
-    @Enumerated(EnumType.STRING)
-    var sex: Sex? = null
-
-    fun updateMemberInfo(
-            name: String,
-            birthday: String,
-            sex: String
-    ) {
-        this.name = name
-        this.birthday = LocalDate.parse(birthday, DateTimeFormatter.ISO_LOCAL_DATE)
-        this.sex = Sex.valueOf(sex.uppercase())
-    }
 }

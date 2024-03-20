@@ -26,6 +26,10 @@ class Member(
     @Embedded
     var nickname: Nickname? = null
 
+    fun updateMemberDetails(memberDetails: MemberDetails) {
+        this.memberDetails = memberDetails
+    }
+
     fun updateNickname(nickname: Nickname) {
         this.nickname = nickname
     }

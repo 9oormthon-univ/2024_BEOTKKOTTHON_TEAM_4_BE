@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component
 import java.net.URI
 
 @Component
+@Transactional
 class AuthService(
         private val authFactory: AuthFactory,
         private val jwtFactory: JwtFactory,
@@ -29,7 +30,6 @@ class AuthService(
         return authFactory.getAuthUriGenerator(provider).generate()
     }
 
-    @Transactional
     fun login(
             providerType: String,
             code: String

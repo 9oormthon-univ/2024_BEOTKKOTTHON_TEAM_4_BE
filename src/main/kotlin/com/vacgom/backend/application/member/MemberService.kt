@@ -6,6 +6,7 @@ import com.vacgom.backend.application.auth.dto.TokenResponse
 import com.vacgom.backend.application.member.dto.request.SignUpRequest
 import com.vacgom.backend.domain.auth.constants.Role
 import com.vacgom.backend.domain.member.HealthProfile
+import com.vacgom.backend.domain.member.MemberDetails
 import com.vacgom.backend.domain.member.Nickname
 import com.vacgom.backend.exception.member.MemberError
 import com.vacgom.backend.exception.member.NicknameError
@@ -13,10 +14,12 @@ import com.vacgom.backend.global.exception.error.BusinessException
 import com.vacgom.backend.global.security.jwt.JwtFactory
 import com.vacgom.backend.infrastructure.member.persistence.HealthProfileRepository
 import com.vacgom.backend.infrastructure.member.persistence.MemberRepository
+import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
+@Transactional
 class MemberService(
         private val memberRepository: MemberRepository,
         private val healthProfileRepository: HealthProfileRepository,
@@ -34,9 +37,10 @@ class MemberService(
     ): AuthResponse {
         val member = memberRepository.findById(memberId).orElseThrow { BusinessException(MemberError.NOT_FOUND) }
         val nickname = Nickname(request.nickname)
+        val memberDetails = MemberDetails(request.name, request.birthday, request.sex)
 
-        member.memberDetails?.updateMemberInfo(request.name, request.birthday, request.sex)
         member.updateNickname(nickname)
+        member.updateMemberDetails(memberDetails)
         member.updateRole(Role.ROLE_USER)
 
         val healthConditions = request.healthConditions.stream()
