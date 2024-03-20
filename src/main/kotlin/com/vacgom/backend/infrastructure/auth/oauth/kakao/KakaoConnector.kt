@@ -1,7 +1,7 @@
 package com.vacgom.backend.infrastructure.auth.oauth.kakao
 
-import com.vacgom.backend.application.auth.dto.OauthTokenResponse
-import com.vacgom.backend.application.auth.dto.ResourceIdResponse
+import com.vacgom.backend.application.auth.dto.response.OauthTokenResponse
+import com.vacgom.backend.application.auth.dto.response.ResourceIdResponse
 import com.vacgom.backend.domain.auth.oauth.OauthConnector
 import com.vacgom.backend.domain.auth.oauth.constants.ProviderType
 import com.vacgom.backend.global.exception.error.BusinessException

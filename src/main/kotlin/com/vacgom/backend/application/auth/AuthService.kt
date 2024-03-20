@@ -1,8 +1,8 @@
 package com.vacgom.backend.application.auth
 
-import com.vacgom.backend.application.auth.dto.AuthResponse
-import com.vacgom.backend.application.auth.dto.MemberResponse
-import com.vacgom.backend.application.auth.dto.TokenResponse
+import com.vacgom.backend.application.auth.dto.response.AuthResponse
+import com.vacgom.backend.application.auth.dto.response.MemberResponse
+import com.vacgom.backend.application.auth.dto.response.TokenResponse
 import com.vacgom.backend.domain.auth.constants.Role.ROLE_TEMP_USER
 import com.vacgom.backend.domain.auth.oauth.constants.ProviderType
 import com.vacgom.backend.domain.member.Member

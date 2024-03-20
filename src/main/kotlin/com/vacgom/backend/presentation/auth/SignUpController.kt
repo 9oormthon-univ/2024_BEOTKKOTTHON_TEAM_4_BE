@@ -1,8 +1,8 @@
-package com.vacgom.backend.presentation.member
+package com.vacgom.backend.presentation.auth
 
-import com.vacgom.backend.application.auth.dto.AuthResponse
-import com.vacgom.backend.application.member.MemberService
-import com.vacgom.backend.application.member.dto.request.SignUpRequest
+import com.vacgom.backend.application.auth.VacgomSignupService
+import com.vacgom.backend.application.auth.dto.request.SignUpRequest
+import com.vacgom.backend.application.auth.dto.response.AuthResponse
 import com.vacgom.backend.global.security.annotation.AuthId
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -11,12 +11,12 @@ import java.util.*
 
 @RestController
 @RequestMapping("/api/v1/member")
-class MemberController(
-        private val memberService: MemberService
+class SignUpController(
+        private val vacgomSignupService: VacgomSignupService
 ) {
     @PostMapping("/validation")
     fun validateNickname(@RequestParam nickname: String): ResponseEntity<Unit> {
-        memberService.validateNickname(nickname)
+        vacgomSignupService.validateNickname(nickname)
         return ResponseEntity.ok().build()
     }
 
@@ -25,7 +25,7 @@ class MemberController(
             @AuthId memberId: UUID,
             @RequestBody request: SignUpRequest
     ): ResponseEntity<AuthResponse> {
-        val authResponse = memberService.signUpVacgom(memberId, request)
+        val authResponse = vacgomSignupService.signUpVacgom(memberId, request)
         return ResponseEntity.ok(authResponse)
     }
 }

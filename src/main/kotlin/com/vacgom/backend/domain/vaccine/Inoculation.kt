@@ -22,9 +22,9 @@ class Inoculation(
         )
         val date: LocalDate,
         val agency: String,
-        val vaccineName: String,
-        val vaccineBrandName: String,
-        val lotNumber: String,
+        val vaccineName: String?,
+        val vaccineBrandName: String?,
+        val lotNumber: String?,
 
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "member_id")
@@ -34,5 +34,5 @@ class Inoculation(
     @Id
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @Column(columnDefinition = "BINARY(16)", name = "vaccine_id")
-    val id: UUID? = null
+    val id: UUID = UUID.randomUUID()
 }

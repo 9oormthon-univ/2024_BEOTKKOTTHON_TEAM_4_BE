@@ -1,7 +1,7 @@
 package com.vacgom.backend.domain.auth.oauth
 
-import com.vacgom.backend.application.auth.dto.OauthTokenResponse
-import com.vacgom.backend.application.auth.dto.ResourceIdResponse
+import com.vacgom.backend.application.auth.dto.response.OauthTokenResponse
+import com.vacgom.backend.application.auth.dto.response.ResourceIdResponse
 import com.vacgom.backend.domain.auth.oauth.constants.ProviderType
 
 interface OauthConnector {

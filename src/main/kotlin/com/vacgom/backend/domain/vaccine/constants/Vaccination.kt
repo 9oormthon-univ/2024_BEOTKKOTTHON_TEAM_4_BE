@@ -1,5 +1,8 @@
 package com.vacgom.backend.domain.vaccine.constants
 
+import com.vacgom.backend.exception.vaccine.VaccineError
+import com.vacgom.backend.global.exception.error.BusinessException
+
 enum class Vaccination(
         val diseaseName: String,
         val vaccineName: String,
@@ -9,7 +12,7 @@ enum class Vaccination(
     BCG("결핵", "BCG(피내용)", 1, 1),
     HEPB("B형간염", "HepB", 1, 3),
     DTAP("디프테리아·파상풍·백일해", "DTaP", 1, 5),
-    TDAP("디프테리아·파상풍·백일해", "DTaP", 6, 6),
+    TDAP("디프테리아·파상풍·백일해", "Tdap", 6, 6),
     IPV("폴리오", "IPV", 1, 4),
     HIB("b형헤모필루스인플루엔자", "Hib", 1, 4),
     PCV("폐렴구균", "PCV", 1, 4),
@@ -22,5 +25,14 @@ enum class Vaccination(
     HPV("사람유두종바이러스감염증", "HPV", 1, 3),
     IIV("인플루엔자", "IIV", 1, Long.MAX_VALUE),
     HPV9("사람유두종바이러스감염증", "HPV9(가다실9)", 1, 3),
-    COVID19("코로나19", "COVID19", 1, 3)
+    COVID19("코로나19", "COVID19", 1, 3);
+
+    companion object {
+        fun getVaccinationByName(vaccineName: String): Vaccination {
+            return entries.find { it.vaccineName == vaccineName }
+                    ?: throw BusinessException(VaccineError.UNKNOWN_VACCINE_REQUESTED).also {
+                        println("Requested vaccine with name '$vaccineName' is unknown.")
+                    }
+        }
+    }
 }

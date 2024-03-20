@@ -1,7 +1,7 @@
 package com.vacgom.backend.presentation.auth
 
 import com.vacgom.backend.application.auth.AuthService
-import com.vacgom.backend.application.auth.dto.AuthResponse
+import com.vacgom.backend.application.auth.dto.response.AuthResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*

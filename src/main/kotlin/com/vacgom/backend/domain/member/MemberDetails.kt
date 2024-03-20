@@ -21,6 +21,6 @@ class MemberDetails(
     constructor(name: String, birthday: String, sex: String) : this(
             name,
             LocalDate.parse(birthday, DateTimeFormatter.ofPattern("yyyy-MM-dd")),
-            Sex.valueOf(sex)
+            Sex.getSexByValue(sex)
     )
 }

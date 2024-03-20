@@ -30,8 +30,8 @@ class Member(
     @OneToMany(mappedBy = "member")
     val inoculations: MutableList<Inoculation> = mutableListOf()
 
-    fun addInoculation(inoculation: Inoculation) {
-        inoculations.add(inoculation)
+    fun addInoculations(inoculations: List<Inoculation>) {
+        this.inoculations.addAll(inoculations)
     }
 
     fun updateMemberDetails(memberDetails: MemberDetails) {

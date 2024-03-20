@@ -12,7 +12,7 @@ class CustomRequestMatcher {
         return OrRequestMatcher(
                 AntPathRequestMatcher("/"), // Actuator Health Checker
                 AntPathRequestMatcher("/api/v1/oauth/**"), // Oauth Login
-                AntPathRequestMatcher("/api/v1/member/validation") // VacgomId Validation Checker
+                AntPathRequestMatcher("/api/v1/member/validation"), // VacgomId Validation Checker
         )
     }
 
