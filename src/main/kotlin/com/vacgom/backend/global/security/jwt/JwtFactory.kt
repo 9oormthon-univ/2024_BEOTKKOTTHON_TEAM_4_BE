@@ -13,13 +13,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.User
-import org.springframework.stereotype.Service
+import org.springframework.stereotype.Component
 import java.security.Key
 import java.util.*
 
 
-@Service
-class JwtService(
+@Component
+class JwtFactory(
         @Value("\${jwt.secret.key}") secret: String,
         @Value("\${jwt.access-token-validity}") private val accessTokenValidity: Long
 ) {
@@ -56,7 +56,7 @@ class JwtService(
             throw BusinessException(AuthError.UNSUPPORTED_JWT_TOKEN)
         }
     }
-    
+
     fun getAuthentication(token: String): Authentication? {
         val claims: Claims = getTokenClaims(token).body
         val authorities = Arrays.stream<String>(arrayOf<String>(claims["role"].toString()))

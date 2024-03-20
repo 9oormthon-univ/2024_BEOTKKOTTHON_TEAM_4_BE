@@ -1,7 +1,7 @@
 package com.vacgom.backend.global.security.filter
 
 import com.vacgom.backend.domain.auth.constants.Role.ROLE_GUEST
-import com.vacgom.backend.global.security.jwt.JwtService
+import com.vacgom.backend.global.security.jwt.JwtFactory
 import com.vacgom.backend.global.security.model.CustomUser
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
@@ -16,7 +16,7 @@ import org.springframework.web.filter.OncePerRequestFilter
 
 @Component
 class JwtAuthFilter(
-        private val jwtService: JwtService,
+        private val jwtFactory: JwtFactory,
         private val log: Logger
 ) : OncePerRequestFilter() {
     companion object {
@@ -42,7 +42,7 @@ class JwtAuthFilter(
             log.info("{}({}) - ({}) {}", principal.username, principal.authorities, request.method, request.requestURL)
             return
         }
-        val authentication = jwtService.getAuthentication(token)
+        val authentication = jwtFactory.getAuthentication(token)
         SecurityContextHolder.getContext().authentication = authentication
         log.info("{}", SecurityContextHolder.getContext())
         chain.doFilter(request, response)

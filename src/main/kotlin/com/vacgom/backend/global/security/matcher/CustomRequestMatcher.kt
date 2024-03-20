@@ -18,7 +18,7 @@ class CustomRequestMatcher {
 
     fun tempUserEndpoints(): RequestMatcher {
         return OrRequestMatcher(
-                AntPathRequestMatcher("/api/v1/api/main")
+                AntPathRequestMatcher("/api/v1/member/signup")
         )
     }
 }
