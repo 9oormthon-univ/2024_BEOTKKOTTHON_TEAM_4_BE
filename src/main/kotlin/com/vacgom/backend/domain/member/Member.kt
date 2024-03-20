@@ -24,10 +24,10 @@ class Member(
     var memberDetails: MemberDetails? = null
 
     @Embedded
-    var vacgomId: VacgomId? = null
+    var nickname: Nickname? = null
 
-    fun updateVacgomId(vacgomId: VacgomId) {
-        this.vacgomId = vacgomId
+    fun updateNickname(nickname: Nickname) {
+        this.nickname = nickname
     }
 
     fun updateRole(role: Role) {

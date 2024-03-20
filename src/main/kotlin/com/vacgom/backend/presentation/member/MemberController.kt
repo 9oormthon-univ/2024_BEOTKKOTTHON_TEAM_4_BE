@@ -14,8 +14,8 @@ class MemberController(
         private val memberService: MemberService
 ) {
     @PostMapping("/validation")
-    fun validateVacgomId(@RequestParam vacgomId: String): ResponseEntity<Unit> {
-        memberService.validateVacgomId(vacgomId)
+    fun validateNickname(@RequestParam nickname: String): ResponseEntity<Unit> {
+        memberService.validateNickname(nickname)
         return ResponseEntity.ok().build()
     }
 

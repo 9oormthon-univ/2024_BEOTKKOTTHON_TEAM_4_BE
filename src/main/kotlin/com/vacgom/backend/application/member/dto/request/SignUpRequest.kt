@@ -7,5 +7,5 @@ data class SignUpRequest(
         val birthday: String,
         val sex: String,
         val healthConditions: MutableList<HealthCondition>,
-        val vacgomId: String
+        val nickname: String
 )
