@@ -1,12 +1,12 @@
 package com.vacgom.backend.application.auth
 
-import com.vacgom.backend.application.auth.dto.LoginResponse
+import com.vacgom.backend.application.auth.dto.AuthResponse
 import com.vacgom.backend.application.auth.dto.MemberResponse
 import com.vacgom.backend.application.auth.dto.TokenResponse
 import com.vacgom.backend.domain.auth.constants.Role.ROLE_TEMP_USER
 import com.vacgom.backend.domain.auth.oauth.constants.ProviderType
 import com.vacgom.backend.domain.member.Member
-import com.vacgom.backend.global.security.jwt.JwtService
+import com.vacgom.backend.global.security.jwt.JwtFactory
 import com.vacgom.backend.infrastructure.member.persistence.MemberRepository
 import jakarta.transaction.Transactional
 import org.springframework.http.HttpHeaders
@@ -14,9 +14,10 @@ import org.springframework.stereotype.Component
 import java.net.URI
 
 @Component
+@Transactional
 class AuthService(
         private val authFactory: AuthFactory,
-        private val jwtService: JwtService,
+        private val jwtFactory: JwtFactory,
         private val memberRepository: MemberRepository
 ) {
     fun createRedirectHeaders(redirectUri: URI): HttpHeaders {
@@ -29,20 +30,19 @@ class AuthService(
         return authFactory.getAuthUriGenerator(provider).generate()
     }
 
-    @Transactional
     fun login(
             providerType: String,
             code: String
-    ): LoginResponse {
+    ): AuthResponse {
         val authConnector = authFactory.getAuthConnector(providerType)
         val oauthToken = authConnector.fetchOauthToken(code)
         val memberInfo = authConnector.fetchMemberInfo(oauthToken.accessToken)
         val member = findOrCreateMember(memberInfo.id, ProviderType.from(providerType))
 
         val memberResponse = MemberResponse(member.id!!, member.role)
-        val tokenResponse = TokenResponse(jwtService.createAccessToken(member))
+        val tokenResponse = TokenResponse(jwtFactory.createAccessToken(member))
 
-        return LoginResponse(memberResponse, tokenResponse)
+        return AuthResponse(memberResponse, tokenResponse)
     }
 
     private fun findOrCreateMember(

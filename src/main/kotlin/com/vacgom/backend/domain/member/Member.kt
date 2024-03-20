@@ -16,10 +16,25 @@ class Member(
 ) : BaseEntity() {
 
     @Id
-    @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @Column(columnDefinition = "BINARY(16)", name = "member_id")
-    val id: UUID? = null
+    val id: UUID? = UUID.randomUUID()
 
-    var name: String? = null
+    @Embedded
+    var memberDetails: MemberDetails? = null
+
+    @Embedded
+    var nickname: Nickname? = null
+
+    fun updateMemberDetails(memberDetails: MemberDetails) {
+        this.memberDetails = memberDetails
+    }
+
+    fun updateNickname(nickname: Nickname) {
+        this.nickname = nickname
+    }
+
+    fun updateRole(role: Role) {
+        this.role = role
+    }
 }

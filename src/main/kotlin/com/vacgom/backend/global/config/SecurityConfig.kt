@@ -39,12 +39,10 @@ class SecurityConfig(
     @Order(1)
     fun anyRequestFilterChain(http: HttpSecurity): SecurityFilterChain {
         http.authorizeRequests { auth ->
-            auth.requestMatchers(customRequestMatcher.tempUserEndpoints()).hasRole("TEMP_USER")
-                    .anyRequest().hasRole("USER")
+            auth.requestMatchers(customRequestMatcher.tempUserEndpoints()).hasRole("TEMP_USER").anyRequest().hasRole("USER")
         }
                 .addFilterAfter(jwtAuthFilter, UsernamePasswordAuthenticationFilter::class.java)
                 .addFilterBefore(apiExceptionHandlingFilter, UsernamePasswordAuthenticationFilter::class.java)
-
         return commonHttpSecurity(http).build()
     }
 

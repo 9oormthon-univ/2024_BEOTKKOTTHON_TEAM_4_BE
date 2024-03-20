@@ -10,14 +10,15 @@ class CustomRequestMatcher {
 
     fun authEndpoints(): RequestMatcher {
         return OrRequestMatcher(
-                AntPathRequestMatcher("/"),
-                AntPathRequestMatcher("/api/v1/oauth/**")
+                AntPathRequestMatcher("/"), // Actuator Health Checker
+                AntPathRequestMatcher("/api/v1/oauth/**"), // Oauth Login
+                AntPathRequestMatcher("/api/v1/member/validation") // VacgomId Validation Checker
         )
     }
 
     fun tempUserEndpoints(): RequestMatcher {
         return OrRequestMatcher(
-                AntPathRequestMatcher("/api/v1/api/main")
+                AntPathRequestMatcher("/api/v1/member/signup")
         )
     }
 }
