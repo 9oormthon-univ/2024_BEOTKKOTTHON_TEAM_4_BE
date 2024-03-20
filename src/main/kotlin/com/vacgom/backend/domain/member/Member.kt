@@ -1,5 +1,6 @@
 package com.vacgom.backend.domain.member
 
+import com.fasterxml.jackson.annotation.JsonFormat
 import com.vacgom.backend.domain.auth.constants.Role
 import com.vacgom.backend.domain.auth.oauth.constants.ProviderType
 import com.vacgom.backend.domain.member.constants.Sex
@@ -18,22 +19,22 @@ class Member(
 ) : BaseEntity() {
 
     @Id
-    @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @Column(columnDefinition = "BINARY(16)", name = "member_id")
-    val id: UUID? = null
+    val id: UUID? = UUID.randomUUID()
 
+    @Column(nullable = false)
     var name: String? = null
-        private set
 
+    @JsonFormat(
+            shape = JsonFormat.Shape.STRING,
+            pattern = "yyyy-MM-dd"
+    )
     var birthday: LocalDate? = null
-        private set
 
     @Enumerated(EnumType.STRING)
     var sex: Sex? = null
-        private set
 
     @Embedded
     var vacgomId: VacgomId? = null
-        private set
 }
