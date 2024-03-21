@@ -11,11 +11,10 @@ import java.util.*
 @Entity
 @Table(name = "t_member")
 class Member(
-        var providerId: Long,
-        @Enumerated(EnumType.STRING) var providerType: ProviderType,
-        @Enumerated(EnumType.STRING) var role: Role,
+    var providerId: Long,
+    @Enumerated(EnumType.STRING) var providerType: ProviderType,
+    @Enumerated(EnumType.STRING) var role: Role,
 ) : BaseEntity() {
-
     @Id
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @Column(columnDefinition = "BINARY(16)", name = "member_id")
@@ -29,6 +28,9 @@ class Member(
 
     @OneToMany(mappedBy = "member")
     val inoculations: MutableList<Inoculation> = mutableListOf()
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
+    val healthProfiles: MutableList<HealthProfile> = mutableListOf()
 
     fun addInoculations(inoculations: List<Inoculation>) {
         this.inoculations.addAll(inoculations)
