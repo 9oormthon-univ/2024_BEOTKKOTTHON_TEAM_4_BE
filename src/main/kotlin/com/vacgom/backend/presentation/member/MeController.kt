@@ -2,7 +2,7 @@ package com.vacgom.backend.presentation.member
 
 import com.vacgom.backend.application.auth.dto.response.MeResponse
 import com.vacgom.backend.application.member.MemberService
-import com.vacgom.backend.domain.member.constants.HealthCondition
+import com.vacgom.backend.domain.disease.HealthCondition
 import com.vacgom.backend.exception.member.HealthConditionError
 import com.vacgom.backend.global.exception.error.BusinessException
 import com.vacgom.backend.global.security.annotation.AuthId

@@ -1,8 +1,8 @@
 package com.vacgom.backend.application.member
 
+import com.vacgom.backend.domain.disease.HealthCondition
 import com.vacgom.backend.domain.member.HealthProfile
 import com.vacgom.backend.domain.member.Member
-import com.vacgom.backend.domain.member.constants.HealthCondition
 import com.vacgom.backend.exception.member.MemberError
 import com.vacgom.backend.global.exception.error.BusinessException
 import com.vacgom.backend.infrastructure.member.persistence.MemberRepository
