@@ -5,5 +5,6 @@ data class InoculationSimpleResponse(
         val vaccineName: String,
         val minOrder: Long,
         val maxOrder: Long,
+        val isCompleted: Boolean,
         val inoculationOrders: List<Long>?
 )

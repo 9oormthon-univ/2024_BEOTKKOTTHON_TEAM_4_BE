@@ -1,16 +1,16 @@
 package com.vacgom.backend.application.auth.dto.response
 
-import com.vacgom.backend.domain.member.constants.HealthCondition
+import com.vacgom.backend.domain.disease.HealthCondition
 
 class HealthConditionResponse(
-    val code: String,
-    val description: String,
+        val code: String,
+        val description: String,
 ) {
     companion object {
         fun of(healthCondition: HealthCondition): HealthConditionResponse {
             return HealthConditionResponse(
-                code = healthCondition.name,
-                description = healthCondition.description,
+                    code = healthCondition.name,
+                    description = healthCondition.description,
             )
         }
     }
