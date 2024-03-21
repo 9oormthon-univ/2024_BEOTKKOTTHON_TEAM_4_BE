@@ -1,8 +1,8 @@
-package com.vacgom.backend.domain.vaccine
+package com.vacgom.backend.domain.inoculation
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import com.vacgom.backend.domain.inoculation.constants.Vaccination
 import com.vacgom.backend.domain.member.Member
-import com.vacgom.backend.domain.vaccine.constants.Vaccination
 import com.vacgom.backend.global.auditing.BaseEntity
 import jakarta.persistence.*
 import org.hibernate.annotations.GenericGenerator

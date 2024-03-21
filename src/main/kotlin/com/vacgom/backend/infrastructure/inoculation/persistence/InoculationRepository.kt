@@ -1,6 +1,6 @@
-package com.vacgom.backend.infrastructure.vaccine.persistence
+package com.vacgom.backend.infrastructure.inoculation.persistence
 
-import com.vacgom.backend.domain.vaccine.Inoculation
+import com.vacgom.backend.domain.inoculation.Inoculation
 import org.springframework.data.jpa.repository.JpaRepository
 import java.util.*
 

@@ -2,7 +2,7 @@ package com.vacgom.backend.domain.member
 
 import com.vacgom.backend.domain.auth.constants.Role
 import com.vacgom.backend.domain.auth.oauth.constants.ProviderType
-import com.vacgom.backend.domain.vaccine.Inoculation
+import com.vacgom.backend.domain.inoculation.Inoculation
 import com.vacgom.backend.global.auditing.BaseEntity
 import jakarta.persistence.*
 import org.hibernate.annotations.GenericGenerator
