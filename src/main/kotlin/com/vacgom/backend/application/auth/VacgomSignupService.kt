@@ -5,19 +5,21 @@ import com.vacgom.backend.application.auth.dto.response.AuthResponse
 import com.vacgom.backend.application.auth.dto.response.MemberResponse
 import com.vacgom.backend.application.auth.dto.response.TokenResponse
 import com.vacgom.backend.domain.auth.constants.Role
+import com.vacgom.backend.domain.inoculation.Inoculation
 import com.vacgom.backend.domain.member.HealthProfile
 import com.vacgom.backend.domain.member.MemberDetails
 import com.vacgom.backend.domain.member.Nickname
-import com.vacgom.backend.domain.vaccine.Inoculation
-import com.vacgom.backend.domain.vaccine.constants.Vaccination
+import com.vacgom.backend.exception.inoculation.VaccineError
 import com.vacgom.backend.exception.member.MemberError
 import com.vacgom.backend.exception.member.NicknameError
 import com.vacgom.backend.global.exception.error.BusinessException
 import com.vacgom.backend.global.security.jwt.JwtFactory
+import com.vacgom.backend.infrastructure.inoculation.persistence.InoculationRepository
+import com.vacgom.backend.infrastructure.inoculation.persistence.VaccinationRepository
 import com.vacgom.backend.infrastructure.member.persistence.HealthProfileRepository
 import com.vacgom.backend.infrastructure.member.persistence.MemberRepository
-import com.vacgom.backend.infrastructure.vaccine.persistence.InoculationRepository
 import jakarta.transaction.Transactional
+import org.slf4j.Logger
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -27,6 +29,8 @@ class VacgomSignupService(
         private val memberRepository: MemberRepository,
         private val healthProfileRepository: HealthProfileRepository,
         private val inoculationRepository: InoculationRepository,
+        private val vaccinationRepository: VaccinationRepository,
+        private val log: Logger,
         private val jwtFactory: JwtFactory
 ) {
     fun validateNickname(id: String) {
@@ -58,18 +62,15 @@ class VacgomSignupService(
 
         val memberResponse = MemberResponse(member.id!!, member.role)
         val tokenResponse = TokenResponse(jwtFactory.createAccessToken(member))
-
-        val inoculations = vaccines.stream()
+        val inoculations = request.vaccinationInfo.vaccineList
                 .map { vaccine ->
-                    val (vaccineType, inoculationOrder, inoculationOrderString, date, agency, vaccineName, vaccineBrandName, lotNumber)
-                            = vaccine
-                    val vaccination = Vaccination.getVaccinationByName(vaccineType)
-                    Inoculation(vaccination, inoculationOrder, inoculationOrderString, date, agency, vaccineName, vaccineBrandName, lotNumber, member)
+                    val vaccination = vaccinationRepository.findByVaccineName(vaccine.vaccineType)
+                            ?: throw BusinessException(VaccineError.UNKNOWN_VACCINE_REQUESTED).also { log.warn("추가되지 않은 백신: {$vaccine.vaccineType}") }
+                    Inoculation(vaccine.inoculationOrder, vaccine.inoculationOrderString, vaccine.date, vaccine.agency, vaccine.vaccineName, vaccine.vaccineBrandName, vaccine.lotNumber, member, vaccination)
                 }.toList()
 
         inoculationRepository.saveAll(inoculations)
         member.addInoculations(inoculations)
-
         return AuthResponse(memberResponse, tokenResponse)
     }
 }

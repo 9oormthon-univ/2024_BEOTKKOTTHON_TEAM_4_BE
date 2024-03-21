@@ -1,6 +1,6 @@
 package com.vacgom.backend.domain.member
 
-import com.vacgom.backend.domain.member.constants.HealthCondition
+import com.vacgom.backend.domain.disease.HealthCondition
 import jakarta.persistence.*
 import org.hibernate.annotations.GenericGenerator
 import java.util.*
@@ -8,12 +8,11 @@ import java.util.*
 @Entity
 @Table(name = "t_health_profile")
 class HealthProfile(
-        @ManyToOne(fetch = FetchType.LAZY)
-        @JoinColumn(name = "member_id")
-        var member: Member,
-
-        @Enumerated(value = EnumType.STRING)
-        var healthCondition: HealthCondition
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    var member: Member,
+    @Enumerated(value = EnumType.STRING)
+    var healthCondition: HealthCondition,
 ) {
     @Id
     @GeneratedValue(generator = "uuid2")
