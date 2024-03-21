@@ -1,8 +1,7 @@
-package com.vacgom.backend.domain.vaccine
+package com.vacgom.backend.domain.inoculation
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.vacgom.backend.domain.member.Member
-import com.vacgom.backend.domain.vaccine.constants.Vaccination
 import com.vacgom.backend.global.auditing.BaseEntity
 import jakarta.persistence.*
 import org.hibernate.annotations.GenericGenerator
@@ -12,8 +11,6 @@ import java.util.*
 @Entity
 @Table(name = "t_innoculation")
 class Inoculation(
-        @Enumerated(value = EnumType.STRING)
-        val vaccination: Vaccination,
         val inoculationOrder: Long,
         val inoculationOrderString: String,
         @JsonFormat(
@@ -28,9 +25,14 @@ class Inoculation(
 
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "member_id")
-        val member: Member
-) : BaseEntity() {
+        val member: Member,
 
+        @ManyToOne(fetch = FetchType.LAZY)
+        @JoinColumn(name = "vaccination_id")
+        val vaccination: Vaccination
+
+) : BaseEntity() {
+    
     @Id
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @Column(columnDefinition = "BINARY(16)", name = "vaccine_id")

@@ -1,4 +1,4 @@
-package com.vacgom.backend.exception.vaccine
+package com.vacgom.backend.exception.inoculation
 
 import com.vacgom.backend.global.exception.error.ErrorCode
 import org.springframework.http.HttpStatus
