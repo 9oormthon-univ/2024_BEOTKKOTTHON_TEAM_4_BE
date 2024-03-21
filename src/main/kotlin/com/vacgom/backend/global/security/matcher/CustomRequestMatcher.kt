@@ -21,4 +21,10 @@ class CustomRequestMatcher {
                 AntPathRequestMatcher("/api/v1/member/signup")
         )
     }
+
+    fun userEndpoints(): RequestMatcher {
+        return OrRequestMatcher(
+                AntPathRequestMatcher("/api/v1/inoculation")
+        )
+    }
 }

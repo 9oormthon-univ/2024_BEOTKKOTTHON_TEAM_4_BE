@@ -5,5 +5,5 @@ data class InoculationSimpleResponse(
         val vaccineName: String,
         val minOrder: Long,
         val maxOrder: Long,
-        val inoculationOrders: List<Long>
+        val inoculationOrders: List<Long>?
 )

@@ -30,9 +30,8 @@ class Inoculation(
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "vaccination_id")
         val vaccination: Vaccination
-
 ) : BaseEntity() {
-    
+
     @Id
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @Column(columnDefinition = "BINARY(16)", name = "vaccine_id")

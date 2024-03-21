@@ -37,9 +37,20 @@ class SecurityConfig(
 
     @Bean
     @Order(1)
-    fun anyRequestFilterChain(http: HttpSecurity): SecurityFilterChain {
+    fun tempUserFilterChain(http: HttpSecurity): SecurityFilterChain {
         http.authorizeRequests { auth ->
             auth.requestMatchers(customRequestMatcher.tempUserEndpoints()).hasRole("TEMP_USER").anyRequest().hasRole("USER")
+        }
+                .addFilterAfter(jwtAuthFilter, UsernamePasswordAuthenticationFilter::class.java)
+                .addFilterBefore(apiExceptionHandlingFilter, UsernamePasswordAuthenticationFilter::class.java)
+        return commonHttpSecurity(http).build()
+    }
+
+    @Bean
+    @Order(2)
+    fun anyRequestFilterChain(http: HttpSecurity): SecurityFilterChain {
+        http.authorizeRequests { auth ->
+            auth.requestMatchers(customRequestMatcher.userEndpoints()).hasRole("USER")
         }
                 .addFilterAfter(jwtAuthFilter, UsernamePasswordAuthenticationFilter::class.java)
                 .addFilterBefore(apiExceptionHandlingFilter, UsernamePasswordAuthenticationFilter::class.java)
