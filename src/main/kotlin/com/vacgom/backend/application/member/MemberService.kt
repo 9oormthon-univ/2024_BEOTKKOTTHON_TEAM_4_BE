@@ -32,4 +32,12 @@ class MemberService(
         member.healthProfiles.addAll(healthProfiles.map { HealthProfile(member, it) })
         return memberRepository.save(member)
     }
+
+    fun withdrawMember(id: UUID) {
+        val member =
+            memberRepository.findById(id).orElseThrow {
+                BusinessException(MemberError.NOT_FOUND)
+            }
+        memberRepository.delete(member)
+    }
 }

@@ -16,6 +16,15 @@ import java.util.*
 class MeController(
     private val memberService: MemberService,
 ) {
+    @DeleteMapping
+    fun withdraw(
+        @AuthId id: UUID,
+    ): ResponseEntity<Boolean> {
+        this.memberService.withdrawMember(id)
+
+        return ResponseEntity.ok(true)
+    }
+
     @GetMapping
     fun findMe(
         @AuthId id: UUID,

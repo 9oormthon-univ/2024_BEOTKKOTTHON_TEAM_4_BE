@@ -26,7 +26,7 @@ class Member(
     @Embedded
     var nickname: Nickname? = null
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = [CascadeType.REMOVE])
     val inoculations: MutableList<Inoculation> = mutableListOf()
 
     @OneToMany(mappedBy = "member", fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
