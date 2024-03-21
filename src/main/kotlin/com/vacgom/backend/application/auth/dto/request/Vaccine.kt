@@ -2,7 +2,7 @@ package com.vacgom.backend.application.auth.dto.request
 
 import java.time.LocalDate
 
-data class Vaccines(
+data class Vaccine(
         val vaccineType: String, //DTap
         val inoculationOrder: Long, // 4
         val inoculationOrderString: String, // 4차(추가)
