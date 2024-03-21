@@ -9,7 +9,7 @@ import java.time.LocalDate
 import java.util.*
 
 @Entity
-@Table(name = "t_innoculation")
+@Table(name = "t_inoculation")
 class Inoculation(
         val inoculationOrder: Long,
         val inoculationOrderString: String,

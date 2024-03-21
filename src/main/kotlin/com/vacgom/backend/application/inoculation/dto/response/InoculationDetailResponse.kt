@@ -8,5 +8,6 @@ data class InoculationDetailResponse(
         val agency: String,
         val lotNumber: String?,
         val vaccineProductName: String?,
+        val vaccineBrandName: String?,
         val date: LocalDate
 )

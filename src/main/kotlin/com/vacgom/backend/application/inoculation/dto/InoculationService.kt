@@ -52,7 +52,7 @@ class InoculationService(
                 ?: throw BusinessException(GlobalError.GLOBAL_NOT_FOUND))
 
         return inoculations.map {
-            InoculationDetailResponse(it.vaccination.vaccineName, it.inoculationOrderString, it.agency, it.lotNumber, it.vaccineName, it.date)
+            InoculationDetailResponse(it.vaccination.vaccineName, it.inoculationOrderString, it.agency, it.lotNumber, it.vaccineName, it.vaccineBrandName, it.date)
         }.toList()
     }
 }
