@@ -24,7 +24,7 @@ class CustomRequestMatcher {
 
     fun userEndpoints(): RequestMatcher {
         return OrRequestMatcher(
-                AntPathRequestMatcher("/api/v1/inoculation")
+                AntPathRequestMatcher("/api/v1/inoculation/**")
         )
     }
 }
