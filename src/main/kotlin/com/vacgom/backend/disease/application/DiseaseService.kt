@@ -6,8 +6,12 @@ import org.springframework.stereotype.Service
 
 @Service
 class DiseaseService(
-        private val diseaseRepository: DiseaseRepository,
+    private val diseaseRepository: DiseaseRepository,
 ) {
+    fun findById(id: Long): Disease {
+        return diseaseRepository.findById(id).orElseThrow { IllegalArgumentException("Disease not found") }
+    }
+
     fun findAll(): List<Disease> {
         return diseaseRepository.findAll()
     }
