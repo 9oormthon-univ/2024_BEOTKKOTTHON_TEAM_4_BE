@@ -10,16 +10,19 @@ enum class AgeCondition(
     AGE40TO49("만 40-49세", 0b001000),
     AGE50TO59("만 50-59세", 0b000100),
     AGE60TO64("만 60-64세", 0b000010),
-    AGEOVER65("만 65세 이상", 0b000001),
-    ;
-
-    fun isMatching(value: Int): Boolean {
-        return value and this.value == this.value
-    }
+    AGEOVER65("만 65세 이상", 0b000001);
 
     companion object {
-        fun getConditions(value: Int): List<AgeCondition> {
-            return entries.filter { it.isMatching(value) }
+        fun getAgeCondition(value: Int): AgeCondition {
+            return when {
+                value in 19..29 -> AGE19TO29
+                value in 30..39 -> AGE30TO39
+                value in 40..49 -> AGE40TO49
+                value in 50..59 -> AGE50TO59
+                value in 60..64 -> AGE60TO64
+                value >= 65 -> AGEOVER65
+                else -> AGE19TO29
+            }
         }
     }
 }
