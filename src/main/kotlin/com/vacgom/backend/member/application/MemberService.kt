@@ -13,20 +13,24 @@ import java.util.*
 @Component
 @Transactional
 class MemberService(
-        private val memberRepository: MemberRepository,
+    private val memberRepository: MemberRepository,
 ) {
+    fun getJoinCount(id: UUID): Number {
+        return memberRepository.getJoinCount(id)
+    }
+
     fun findMember(id: UUID): Member? {
         return memberRepository.findById(id).orElseThrow()
     }
 
     fun updateHealthCondition(
-            id: UUID,
-            healthProfiles: List<HealthCondition>,
+        id: UUID,
+        healthProfiles: List<HealthCondition>,
     ): Member {
         val member =
-                memberRepository.findById(id).orElseThrow {
-                    BusinessException(MemberError.NOT_FOUND)
-                }
+            memberRepository.findById(id).orElseThrow {
+                BusinessException(MemberError.NOT_FOUND)
+            }
 
         member.healthProfiles.clear()
         member.healthProfiles.addAll(healthProfiles.map { HealthProfile(member, it) })
@@ -35,9 +39,9 @@ class MemberService(
 
     fun withdrawMember(id: UUID) {
         val member =
-                memberRepository.findById(id).orElseThrow {
-                    BusinessException(MemberError.NOT_FOUND)
-                }
+            memberRepository.findById(id).orElseThrow {
+                BusinessException(MemberError.NOT_FOUND)
+            }
         memberRepository.delete(member)
     }
 }
