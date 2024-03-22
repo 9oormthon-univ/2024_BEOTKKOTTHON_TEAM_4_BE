@@ -9,16 +9,15 @@ import java.util.*
 @Entity
 @Table(name = "t_vaccination")
 class Vaccination(
-        val diseaseName: String,
-        val vaccineName: String,
-        val minOrder: Long,
-        val maxOrder: Long,
-        @Enumerated(EnumType.STRING) val vaccinationType: VaccinationType
+    val diseaseName: String,
+    val vaccineName: String,
+    val minOrder: Long,
+    val maxOrder: Long,
+    val icon: String,
+    @Enumerated(EnumType.STRING) val vaccinationType: VaccinationType,
 ) : BaseEntity() {
-
     @Id
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @Column(columnDefinition = "BINARY(16)", name = "vaccination_id")
     val id: UUID? = null
 }
-
