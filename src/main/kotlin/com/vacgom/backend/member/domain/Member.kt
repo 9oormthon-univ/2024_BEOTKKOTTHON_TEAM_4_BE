@@ -11,9 +11,9 @@ import java.util.*
 @Entity
 @Table(name = "t_member")
 class Member(
-        var providerId: Long,
-        @Enumerated(EnumType.STRING) var providerType: ProviderType,
-        @Enumerated(EnumType.STRING) var role: Role,
+    var providerId: Long,
+    @Enumerated(EnumType.STRING) var providerType: ProviderType,
+    @Enumerated(EnumType.STRING) var role: Role,
 ) : BaseEntity() {
     @Id
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
