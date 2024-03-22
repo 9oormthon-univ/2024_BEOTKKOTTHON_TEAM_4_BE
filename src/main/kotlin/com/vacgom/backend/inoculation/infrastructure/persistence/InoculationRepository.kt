@@ -14,6 +14,11 @@ interface InoculationRepository : JpaRepository<Inoculation, UUID> {
             "and i.vaccination.vaccinationType = :vaccinationType")
     fun findInoculationsByMemberIdAndVaccinationType(memberId: UUID, vaccinationType: VaccinationType): List<Inoculation>
 
+    @Query("select distinct i.vaccination.diseaseName " +
+            "from Inoculation i " +
+            "where i.member.id = :memberId")
+    fun findDistinctDiseaseNameByMemberId(memberId: UUID): List<String>
+
     @Query("select i " +
             "from Inoculation i " +
             "where i.member.id = :memberId and i.vaccination.diseaseName = :diseaseName " +
