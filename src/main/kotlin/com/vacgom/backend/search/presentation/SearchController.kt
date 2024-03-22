@@ -1,4 +1,4 @@
-package com.vacgom.backend.presentation.search
+package com.vacgom.backend.search.presentation
 
 import com.vacgom.backend.disease.application.dto.request.FilterRequest
 import com.vacgom.backend.disease.domain.constants.AgeCondition
