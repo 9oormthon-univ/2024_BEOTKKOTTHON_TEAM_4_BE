@@ -3,6 +3,7 @@ package com.vacgom.backend.presentation.search
 import com.vacgom.backend.disease.application.dto.request.FilterRequest
 import com.vacgom.backend.disease.domain.constants.AgeCondition
 import com.vacgom.backend.disease.domain.constants.HealthCondition
+import com.vacgom.backend.global.security.annotation.AuthId
 import com.vacgom.backend.search.application.SearchService
 import com.vacgom.backend.search.application.dto.DiseaseSearchResponse
 import com.vacgom.backend.search.application.dto.VaccinationSearchResponse
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import java.util.*
 
 @RestController
 @RequestMapping("/api/v1/search")
@@ -33,11 +35,11 @@ class SearchController(
     fun vaccination(
             @RequestBody body: FilterRequest,
     ): ResponseEntity<List<VaccinationSearchResponse>> {
-        return ResponseEntity.ok(
-                searchService.searchVaccination(
-                        body.age.map { AgeCondition.valueOf(it) },
-                        body.condition.map { HealthCondition.valueOf(it) },
-                ),
-        )
+        return ResponseEntity.ok(searchService.searchVaccination(body))
+    }
+
+    @GetMapping("/recommend")
+    fun recommendVaccination(@AuthId id: UUID): ResponseEntity<List<VaccinationSearchResponse>> {
+        return ResponseEntity.ok(searchService.searchRecommendVaccination(id))
     }
 }
