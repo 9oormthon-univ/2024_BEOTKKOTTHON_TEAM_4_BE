@@ -14,6 +14,7 @@ import com.vacgom.backend.member.infrastructure.persistence.MemberRepository
 import com.vacgom.backend.search.application.dto.DiseaseSearchResponse
 import com.vacgom.backend.search.application.dto.VaccinationSearchResponse
 import org.springframework.stereotype.Service
+import java.time.LocalDate
 import java.util.*
 
 
@@ -51,15 +52,16 @@ class SearchService(
     }
 
     fun searchRecommendVaccination(memberId: UUID): List<VaccinationSearchResponse> {
-        val ageCondition = AgeCondition.AGE19TO29
+        val member = memberRepository.findById(memberId).orElseThrow {
+            BusinessException(MemberError.NOT_FOUND)
+        }
 
+        val ageCondition = AgeCondition.getAgeCondition(member.memberDetails?.birthday?.year!!.minus(LocalDate.now().year))
         val vaccinations = findAllVaccinations()
         val inoculatedDiseaseName = inoculationRepository.findDistinctDiseaseNameByMemberId(memberId).flatMap { it.split("·") }.toSet()
         val recommendedVaccinations = vaccinations.filter { vaccination -> !inoculatedDiseaseName.contains(vaccination.vaccineName) }
 
-        val healthProfiles = memberRepository.findById(memberId).orElseThrow {
-            BusinessException(MemberError.NOT_FOUND)
-        }.healthProfiles.map { it.healthCondition }.toList()
+        val healthProfiles = member.healthProfiles.map { it.healthCondition }.toList()
 
         val diseases = this.searchDisease(listOf(ageCondition), healthProfiles).filter { response ->
             !inoculatedDiseaseName.contains(response.name)
