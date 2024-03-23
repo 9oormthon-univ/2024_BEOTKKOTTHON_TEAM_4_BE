@@ -19,6 +19,6 @@ interface MemberRepository : JpaRepository<Member, UUID> {
     @Query("SELECT COUNT(m)+1 FROM Member m WHERE m.createdDate <= (SELECT m.createdDate FROM Member m WHERE m.id = :uuid)")
     fun getJoinCount(uuid: UUID): Number
 
-    @Query("Select Count(m) From Member m where m.role = :role")
-    fun countMembersByRole(role: Role): Long
+    @Query("Select Count(m) From Member m where m.nickname is not null")
+    fun countValidUser(): Long
 }

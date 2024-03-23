@@ -110,13 +110,22 @@ class SearchService(
                         )
     }
 
-    fun getInoculatedRatioResponse(): SupportVaccineResponse {
-        val membersCount = memberRepository.countMembersByRole(Role.ROLE_USER)
-        val hpvCount = inoculationRepository.findInoculationsByDiseaseName("사람유듀종바이러스감염증")
-        val tt = hpvCount.count()
 
-        log.warn("membersCount : {$membersCount}")
-        log.warn("hpvCount : {$tt}")
-        return SupportVaccineResponse(30, 30)
+    fun getInoculatedRatioResponse(): SupportVaccineResponse {
+        val membersCount = memberRepository.countValidUser()
+        val hpv = inoculationRepository.findInoculationsByDiseaseName("사람유두종바이러스감염증")
+        val influenza = inoculationRepository.findInoculationsByDiseaseName("인플루엔자")
+
+
+        val distinctInfluenzaCount = influenza.distinctBy { it.member.id }.count()
+        val distinctHpvCount = hpv.distinctBy { it.member.id }.count()
+        println("dic: ${distinctInfluenzaCount}")
+        println("member: ${membersCount}")
+
+
+        val influenzaPercentage = distinctInfluenzaCount.toDouble() / membersCount.toDouble() * 100.0
+        val hpvPercentage = distinctHpvCount.toDouble() / membersCount.toDouble() * 100.0
+
+        return SupportVaccineResponse(influenzaPercentage.toLong(), hpvPercentage.toLong())
     }
 }
