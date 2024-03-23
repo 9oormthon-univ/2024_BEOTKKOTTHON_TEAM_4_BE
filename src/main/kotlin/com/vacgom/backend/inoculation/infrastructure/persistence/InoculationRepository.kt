@@ -25,4 +25,10 @@ interface InoculationRepository : JpaRepository<Inoculation, UUID> {
             "and i.vaccination.vaccinationType = :vaccinationType " +
             "order by i.date desc")
     fun findInoculationsByMemberIdAndVaccinationTypeAndDiseaseName(memberId: UUID, vaccinationType: VaccinationType, diseaseName: String): List<Inoculation>?
+
+
+    @Query("select distinct i " +
+            "from Inoculation i " +
+            "where i.member.id =: memberId")
+    fun findDistinctLatestInoculationsByMemberId(memberId: UUID): List<Inoculation>
 }
