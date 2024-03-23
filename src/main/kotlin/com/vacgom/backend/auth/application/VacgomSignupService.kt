@@ -71,6 +71,6 @@ class VacgomSignupService(
 
         inoculationRepository.saveAll(inoculations)
         member.addInoculations(inoculations)
-        return AuthResponse(memberResponse, tokenResponse)
+        return AuthResponse(true, memberResponse, tokenResponse)
     }
 }

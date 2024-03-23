@@ -14,6 +14,7 @@ class Vaccination(
     val minOrder: Long,
     val maxOrder: Long,
     val icon: String,
+    val certificationIcon: String,
     @Enumerated(EnumType.STRING) val vaccinationType: VaccinationType,
 ) : BaseEntity() {
     @Id

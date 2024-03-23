@@ -42,7 +42,7 @@ class AuthService(
         val memberResponse = MemberResponse(member.id!!, member.role)
         val tokenResponse = TokenResponse(jwtFactory.createAccessToken(member))
 
-        return AuthResponse(memberResponse, tokenResponse)
+        return AuthResponse(true, memberResponse, tokenResponse)
     }
 
     private fun findOrCreateMember(

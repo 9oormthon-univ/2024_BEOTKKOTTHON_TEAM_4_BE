@@ -3,6 +3,7 @@ package com.vacgom.backend.inoculation.application
 import com.vacgom.backend.global.exception.error.BusinessException
 import com.vacgom.backend.global.exception.error.GlobalError
 import com.vacgom.backend.inoculation.application.dto.request.DiseaseNameRequest
+import com.vacgom.backend.inoculation.application.dto.response.InoculationCertificateResponse
 import com.vacgom.backend.inoculation.application.dto.response.InoculationDetailResponse
 import com.vacgom.backend.inoculation.application.dto.response.InoculationSimpleResponse
 import com.vacgom.backend.inoculation.domain.constants.VaccinationType
@@ -78,12 +79,16 @@ class InoculationService(
         }.toList()
     }
 
-    fun getCertificates(memberId: UUID) {
-        val findDistinctLatestInoculationsByMemberId =
-            inoculationRepository.findDistinctLatestInoculationsByMemberId(memberId)
-
-        findDistinctLatestInoculationsByMemberId.forEach { lis ->
-            log.warn("{}, lis")
-        }
+    fun getCertificates(memberId: UUID): List<InoculationCertificateResponse> {
+        val inoculations = inoculationRepository.findDistinctLatestInoculationsByMemberId(memberId)
+        val sortedByDescending = inoculations.sortedByDescending { it.date }
+        return sortedByDescending.map {
+            InoculationCertificateResponse(
+                it.vaccination.diseaseName,
+                it.vaccination.vaccineName,
+                it.date,
+                it.vaccination.certificationIcon
+            )
+        }.toList()
     }
 }

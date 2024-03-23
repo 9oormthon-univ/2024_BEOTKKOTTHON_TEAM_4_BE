@@ -40,11 +40,9 @@ interface InoculationRepository : JpaRepository<Inoculation, UUID> {
     ): List<Inoculation>?
 
 
-    @Query(
-        "select i " +
-                "from Inoculation i " +
-                "where (i.vaccination.diseaseName, i.inoculationOrder) in " +
-                "(select iv.vaccination.diseaseName, max(iv.inoculationOrder) from Inoculation iv where iv.member.id = :memberId group by iv.vaccination.diseaseName)"
-    )
+    @Query("SELECT i " +
+            "FROM Inoculation i JOIN i.vaccination v " +
+            "GROUP BY i.vaccination.id " +
+            "ORDER BY i.inoculationOrder DESC")
     fun findDistinctLatestInoculationsByMemberId(memberId: UUID): List<Inoculation>
 }
