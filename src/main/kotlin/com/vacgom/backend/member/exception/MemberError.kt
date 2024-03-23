@@ -3,7 +3,6 @@ package com.vacgom.backend.member.exception
 import com.vacgom.backend.global.exception.error.ErrorCode
 import org.springframework.http.HttpStatus
 
-
 enum class MemberError(
         override val message: String,
         override val status: HttpStatus,
