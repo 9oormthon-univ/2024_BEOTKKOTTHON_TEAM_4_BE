@@ -61,4 +61,9 @@ class SearchController(
     fun recommendVaccination(@AuthId id: UUID): ResponseEntity<List<VaccinationSearchResponse>> {
         return ResponseEntity.ok(searchService.searchRecommendVaccination(id))
     }
+
+    @GetMapping("/certificate")
+    fun getCertificate(@AuthId id: UUID): ResponseEntity<List<VaccinationSearchResponse>> {
+        return ResponseEntity.ok(searchService.searchRecommendVaccination(id))
+    }
 }
