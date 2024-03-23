@@ -7,51 +7,50 @@ import org.springframework.data.jpa.repository.Query
 import java.util.*
 
 interface InoculationRepository : JpaRepository<Inoculation, UUID> {
-
     @Query(
         "select i " +
-                "from Inoculation i " +
-                "where i.member.id = :memberId " +
-                "and i.vaccination.vaccinationType = :vaccinationType"
+            "from Inoculation i " +
+            "where i.member.id = :memberId " +
+            "and i.vaccination.vaccinationType = :vaccinationType",
     )
     fun findInoculationsByMemberIdAndVaccinationType(
         memberId: UUID,
-        vaccinationType: VaccinationType
+        vaccinationType: VaccinationType,
     ): List<Inoculation>
 
     @Query(
         "select distinct i.vaccination.diseaseName " +
-                "from Inoculation i " +
-                "where i.member.id = :memberId"
+            "from Inoculation i " +
+            "where i.member.id = :memberId",
     )
     fun findDistinctDiseaseNameByMemberId(memberId: UUID): List<String>
 
     @Query(
         "select i " +
-                "from Inoculation i " +
-                "where i.member.id = :memberId and i.vaccination.diseaseName = :diseaseName " +
-                "and i.vaccination.vaccinationType = :vaccinationType " +
-                "order by i.date desc"
+            "from Inoculation i " +
+            "where i.member.id = :memberId and i.vaccination.diseaseName = :diseaseName " +
+            "and i.vaccination.vaccinationType = :vaccinationType " +
+            "order by i.date desc",
     )
     fun findInoculationsByMemberIdAndVaccinationTypeAndDiseaseName(
         memberId: UUID,
         vaccinationType: VaccinationType,
-        diseaseName: String
+        diseaseName: String,
     ): List<Inoculation>?
-
 
     @Query(
         "SELECT i " +
-                "FROM Inoculation i JOIN i.vaccination v " +
-                "GROUP BY i.vaccination.id " +
-                "ORDER BY i.inoculationOrder DESC"
+            "FROM Inoculation i JOIN i.vaccination v " +
+            "GROUP BY i.vaccination.id " +
+            "HAVING i.member.id = :memberId " +
+            "ORDER BY i.inoculationOrder DESC",
     )
     fun findDistinctLatestInoculationsByMemberId(memberId: UUID): List<Inoculation>
 
     @Query(
         "SELECT i " +
-                "from Inoculation i " +
-                "where i.vaccination.diseaseName = :diseaseName"
+            "from Inoculation i " +
+            "where i.vaccination.diseaseName = :diseaseName",
     )
     fun findInoculationsByDiseaseName(diseaseName: String): List<Inoculation>
 }
