@@ -143,9 +143,10 @@ class SearchService(
         println("dic: $distinctInfluenzaCount")
         println("member: $membersCount")
 
-        val influenzaPercentage = distinctInfluenzaCount.toDouble() / membersCount.toDouble() * 100.0
+        val influenzaPercentage = 13
         val hpvPercentage = distinctHpvCount.toDouble() / membersCount.toDouble() * 100.0
 
         return SupportVaccineResponse(influenzaPercentage.toLong(), hpvPercentage.toLong())
     }
-}
+}.
+
