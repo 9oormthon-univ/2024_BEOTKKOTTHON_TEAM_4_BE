@@ -24,7 +24,7 @@ class InoculationController(
         return ResponseEntity.ok(responses)
     }
 
-    @GetMapping("/detail")
+    @PostMapping("/detail")
     fun getInoculationDetailResponse(
         @AuthId id: UUID,
         @RequestBody request: DiseaseNameRequest,
@@ -35,7 +35,9 @@ class InoculationController(
     }
 
     @GetMapping("/certificate")
-    fun getInoculationCertificateResponse(@AuthId id: UUID): ResponseEntity<List<InoculationCertificateResponse>> {
+    fun getInoculationCertificateResponse(
+        @AuthId id: UUID,
+    ): ResponseEntity<List<InoculationCertificateResponse>> {
         val certificates = inoculationService.getCertificates(id)
         return ResponseEntity.ok(certificates)
     }
