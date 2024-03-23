@@ -19,11 +19,11 @@ import java.util.*
 class InoculationService(
     private val inoculationRepository: InoculationRepository,
     private val vaccinationRepository: VaccinationRepository,
-    private val log: Logger
+    private val log: Logger,
 ) {
     fun getInoculationSimpleResponse(
         memberId: UUID,
-        vaccinationType: String
+        vaccinationType: String,
     ): List<InoculationSimpleResponse> {
         val validatedVaccinationType = VaccinationType.valueOf(vaccinationType.uppercase())
         val vaccinations = vaccinationRepository.findAllByVaccinationType(validatedVaccinationType)
@@ -49,7 +49,7 @@ class InoculationService(
                 vaccination.minOrder,
                 vaccination.maxOrder,
                 isCompleted,
-                vaccineOrders
+                vaccineOrders,
             )
         }.toList()
     }
@@ -57,15 +57,17 @@ class InoculationService(
     fun getInoculationDetailResponse(
         memberId: UUID,
         request: DiseaseNameRequest,
-        vaccinationType: String
+        vaccinationType: String,
     ): List<InoculationDetailResponse> {
         val validatedVaccinationType = VaccinationType.valueOf(vaccinationType.uppercase())
-        val inoculations = (inoculationRepository.findInoculationsByMemberIdAndVaccinationTypeAndDiseaseName(
-            memberId,
-            validatedVaccinationType,
-            request.name
+        val inoculations = (
+            inoculationRepository.findInoculationsByMemberIdAndVaccinationTypeAndDiseaseName(
+                memberId,
+                validatedVaccinationType,
+                request.name,
+            )
+                ?: throw BusinessException(GlobalError.GLOBAL_NOT_FOUND)
         )
-            ?: throw BusinessException(GlobalError.GLOBAL_NOT_FOUND))
 
         return inoculations.map {
             InoculationDetailResponse(
@@ -75,7 +77,7 @@ class InoculationService(
                 it.lotNumber,
                 it.vaccineName,
                 it.vaccineBrandName,
-                it.date
+                it.date,
             )
         }.toList()
     }
@@ -85,10 +87,12 @@ class InoculationService(
         val sortedByDescending = inoculations.sortedByDescending { it.date }
         return sortedByDescending.map {
             InoculationCertificateResponse(
+                memberId.toString(),
+                it.vaccination.id.toString(),
                 it.vaccination.diseaseName,
                 it.vaccination.vaccineName,
                 it.date,
-                it.vaccination.certificationIcon
+                it.vaccination.certificationIcon,
             )
         }.toList()
     }

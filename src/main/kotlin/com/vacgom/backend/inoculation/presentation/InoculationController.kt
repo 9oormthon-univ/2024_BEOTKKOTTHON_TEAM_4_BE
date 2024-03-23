@@ -41,4 +41,13 @@ class InoculationController(
         val certificates = inoculationService.getCertificates(id)
         return ResponseEntity.ok(certificates)
     }
+
+    @GetMapping("/certificate/{vaccineId}")
+    fun getCertificateByVaccineId(
+        @AuthId id: UUID,
+        @PathVariable("vaccineId") vaccineId: String,
+    ): ResponseEntity<InoculationCertificateResponse> {
+        val certificates = inoculationService.getCertificates(id)
+        return ResponseEntity.ok(certificates.filter { it.vaccineId == vaccineId }.first())
+    }
 }
