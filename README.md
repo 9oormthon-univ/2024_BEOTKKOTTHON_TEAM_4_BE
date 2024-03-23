@@ -52,9 +52,19 @@
 	<td><img src="https://user-images.githubusercontent.com/112257466/209078356-d9120e3d-9498-4ee4-a38d-139a263910f4.png" width="14px" alt="_icon" />&nbsp;&nbsp;<b>MySQL</td>
     <td>Back-End Main Database</td>
   </tr>
-  
   <tr>
-    <td rowspan="3" align="center"><b>Infra</td>
+    <td rowspan="3" align="center"><b>FE</td>
+    <td><img src="https://static-00.iconduck.com/assets.00/nextjs-icon-512x512-y563b8iq.png" width="15px" alt="_icon" />&nbsp;&nbsp;<b>Next.js</td>
+    <td rowspan="1">Freakin Next.js</td>
+  </tr>
+  <tr>
+    <td><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/2300px-React-icon.svg.png" width="15px" alt="_icon" />&nbsp;&nbsp;<b>React.js</td>
+	<td rowspan="1">리액또</td>
+    <tr>
+	<td><img src="https://i.namu.wiki/i/6BCaly_IHOsGCno5SofR4NCvQZQp7JzBSaPrRXivLldaA-Rbuceh1oDMN6LfUuZiScaR2eBK7-sGgB-xae_YWA.webp" width="15px" alt="_icon" />&nbsp;&nbsp;<b>TypeScript</td>
+	<td rowspan="1">타스</td>
+  <tr>
+    <td rowspan="7" align="center"><b>Infra</td>
     <td><img src="https://cdn.worldvectorlogo.com/logos/aws-ec2.svg" width="15px" alt="_icon" />&nbsp;&nbsp;<b>AWS EC2</td>
     <td>프리티어 최고!</td>
   </tr>
@@ -65,6 +75,22 @@
   <tr>
     <td><img src="https://github.com/goormthon-Univ/2024_BEOTKKOTTHON_TEAM_4_BE/assets/112257466/8ec2b890-b9de-4542-93cf-91890e0ebd54" width="15px" alt="_icon" />&nbsp;&nbsp;<b>AWS ECR</td>
     <td>Elastic Container Registry는 엄청나요</td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/goormthon-Univ/2024_BEOTKKOTTHON_TEAM_4_BE/assets/112257466/8ec2b890-b9de-4542-93cf-91890e0ebd54" width="15px" alt="_icon" />&nbsp;&nbsp;<b>AWS ECS</td>
+    <td>Elastic Container Registry는 엄청나요</td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/goormthon-Univ/2024_BEOTKKOTTHON_TEAM_4_BE/assets/112257466/8ec2b890-b9de-4542-93cf-91890e0ebd54" width="15px" alt="_icon" />&nbsp;&nbsp;<b>AWS Lambda</td>
+    <td>Elastic Container Registry는 엄청나요</td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/goormthon-Univ/2024_BEOTKKOTTHON_TEAM_4_BE/assets/112257466/8ec2b890-b9de-4542-93cf-91890e0ebd54" width="15px" alt="_icon" />&nbsp;&nbsp;<b>AWS DynamoDB</td>
+    <td>Elastic Container Registry는 엄청나요</td>
+  </tr>
+    <tr>
+    <td><img src="https://hectodata.co.kr/assets/images/icon/codef_api_circle_logo.png" width="15px" alt="_icon" />&nbsp;&nbsp;<b>Codef</td>
+    <td>Codef</td>
   </tr>
   <tr>
   <tr>
