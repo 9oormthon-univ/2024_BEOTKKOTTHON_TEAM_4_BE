@@ -4,6 +4,7 @@ import com.vacgom.backend.auth.domain.constants.ProviderType
 import com.vacgom.backend.auth.domain.constants.Role
 import com.vacgom.backend.global.auditing.BaseEntity
 import com.vacgom.backend.inoculation.domain.Inoculation
+import com.vacgom.backend.notification.domain.Notification
 import jakarta.persistence.*
 import org.hibernate.annotations.GenericGenerator
 import java.util.*
@@ -31,6 +32,9 @@ class Member(
 
     @OneToMany(mappedBy = "member", fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
     var healthProfiles: MutableList<HealthProfile> = mutableListOf()
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
+    val notifications: MutableList<Notification> = mutableListOf()
 
     fun addInoculations(inoculations: List<Inoculation>) {
         this.inoculations.addAll(inoculations)
