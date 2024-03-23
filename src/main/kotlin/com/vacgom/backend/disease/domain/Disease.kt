@@ -11,7 +11,10 @@ class Disease(
     @Column(name = "disease_id")
     val id: Long? = null,
     val name: String,
+    @Column(columnDefinition = "VARCHAR(1000)")
     val iconImage: String?,
+
+    @Column(columnDefinition = "VARCHAR(1000)")
     val mainImage: String?,
     val description: String?,
     val ageFilter: Int,

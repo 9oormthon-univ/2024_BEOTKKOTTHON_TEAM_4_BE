@@ -13,7 +13,9 @@ class Vaccination(
     val vaccineName: String,
     val minOrder: Long,
     val maxOrder: Long,
+    @Column(columnDefinition = "VARCHAR(1000)")
     val icon: String,
+    @Column(columnDefinition = "VARCHAR(1000)")
     val certificationIcon: String,
     @Enumerated(EnumType.STRING) val vaccinationType: VaccinationType,
 ) : BaseEntity() {
