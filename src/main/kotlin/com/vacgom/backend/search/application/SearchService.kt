@@ -1,6 +1,5 @@
 package com.vacgom.backend.search.application
 
-import com.vacgom.backend.auth.domain.constants.Role
 import com.vacgom.backend.disease.application.DiseaseService
 import com.vacgom.backend.disease.domain.Disease
 import com.vacgom.backend.disease.domain.constants.AgeCondition
@@ -26,7 +25,7 @@ class SearchService(
     val inoculationRepository: InoculationRepository,
     val memberRepository: MemberRepository,
     val diseaseService: DiseaseService,
-    val log: Logger
+    val log: Logger,
 ) {
     private fun findAllVaccinations(): List<Vaccination> {
         return vaccinationRepository.findAll()
@@ -53,8 +52,28 @@ class SearchService(
 
         return vaccinations.filter {
             diseases.any { disease -> it.diseaseName.contains(disease.name) } &&
-                    it.vaccinationType == type
+                it.vaccinationType == type
         }.map { VaccinationSearchResponse.of(it) }
+    }
+
+    private fun isInJeolGi(date: LocalDate): Boolean {
+        val jeolGi = LocalDate.of(2023, 9, 20)
+        val jeolGiEnd = LocalDate.of(2024, 4, 30)
+
+        println("jeolGi: $date")
+        return date.isAfter(jeolGi) && date.isBefore(jeolGiEnd)
+    }
+
+    private fun userVaccinatedIIV(memberId: UUID): Boolean {
+        val inoculations =
+            inoculationRepository.findInoculationsByMemberIdAndVaccinationTypeAndDiseaseName(
+                memberId,
+                VaccinationType.NATION,
+                "인플루엔자",
+            ) ?: return false
+        if (inoculations.isEmpty()) return false
+
+        return this.isInJeolGi(inoculations.first().date)
     }
 
     fun searchRecommendVaccination(memberId: UUID): List<VaccinationSearchResponse> {
@@ -75,7 +94,11 @@ class SearchService(
 
         val diseases =
             this.searchDisease(listOf(ageCondition), healthProfiles).filter { response ->
-                !inoculatedDiseaseName.contains(response.name)
+                (
+                    (response.name == "인플루엔자" && this.userVaccinatedIIV(memberId)) ||
+                        response.name != "인플루엔자"
+                ) &&
+                    !inoculatedDiseaseName.contains(response.name)
             }.toList()
         return filterByDisease(recommendedVaccinations, diseases)
     }
@@ -103,25 +126,22 @@ class SearchService(
         }
 
         return disease.ageFilter and ageValue == ageValue ||
-                (
-                        disease.conditionalAgeFilter and ageValue == ageValue &&
-                                disease.healthConditionFilter and conditionValue > 0 &&
-                                disease.forbiddenHealthConditionFilter and conditionValue == 0
-                        )
+            (
+                disease.conditionalAgeFilter and ageValue == ageValue &&
+                    disease.healthConditionFilter and conditionValue > 0 &&
+                    disease.forbiddenHealthConditionFilter and conditionValue == 0
+            )
     }
-
 
     fun getInoculatedRatioResponse(): SupportVaccineResponse {
         val membersCount = memberRepository.countValidUser()
         val hpv = inoculationRepository.findInoculationsByDiseaseName("사람유두종바이러스감염증")
         val influenza = inoculationRepository.findInoculationsByDiseaseName("인플루엔자")
 
-
         val distinctInfluenzaCount = influenza.distinctBy { it.member.id }.count()
         val distinctHpvCount = hpv.distinctBy { it.member.id }.count()
-        println("dic: ${distinctInfluenzaCount}")
-        println("member: ${membersCount}")
-
+        println("dic: $distinctInfluenzaCount")
+        println("member: $membersCount")
 
         val influenzaPercentage = distinctInfluenzaCount.toDouble() / membersCount.toDouble() * 100.0
         val hpvPercentage = distinctHpvCount.toDouble() / membersCount.toDouble() * 100.0
