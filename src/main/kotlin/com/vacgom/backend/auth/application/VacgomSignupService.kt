@@ -8,7 +8,6 @@ import com.vacgom.backend.auth.domain.constants.Role
 import com.vacgom.backend.global.exception.error.BusinessException
 import com.vacgom.backend.global.security.jwt.JwtFactory
 import com.vacgom.backend.inoculation.domain.Inoculation
-import com.vacgom.backend.inoculation.exception.VaccineError
 import com.vacgom.backend.inoculation.infrastructure.persistence.InoculationRepository
 import com.vacgom.backend.inoculation.infrastructure.persistence.VaccinationRepository
 import com.vacgom.backend.member.domain.HealthProfile
@@ -26,12 +25,12 @@ import java.util.*
 @Service
 @Transactional
 class VacgomSignupService(
-        private val memberRepository: MemberRepository,
-        private val healthProfileRepository: HealthProfileRepository,
-        private val inoculationRepository: InoculationRepository,
-        private val vaccinationRepository: VaccinationRepository,
-        private val log: Logger,
-        private val jwtFactory: JwtFactory
+    private val memberRepository: MemberRepository,
+    private val healthProfileRepository: HealthProfileRepository,
+    private val inoculationRepository: InoculationRepository,
+    private val vaccinationRepository: VaccinationRepository,
+    private val log: Logger,
+    private val jwtFactory: JwtFactory
 ) {
     fun validateNickname(id: String) {
         val nickname = Nickname(id)
@@ -40,9 +39,9 @@ class VacgomSignupService(
     }
 
     fun signUpVacgom(
-            memberId: UUID,
-            request: SignUpRequest
-    ): AuthResponse {
+        memberId: UUID,
+        request: SignUpRequest
+    ): AuthResponse? {
         val (nickname, healthConditions) = request.memberInfo
         val (name, birthday, sex, vaccines) = request.vaccinationInfo
 
@@ -55,19 +54,33 @@ class VacgomSignupService(
         member.updateRole(Role.ROLE_USER)
 
         val healthProfiles = healthConditions.stream()
-                .map { condition ->
-                    HealthProfile(member, condition)
-                }.toList()
+            .map { condition ->
+                HealthProfile(member, condition)
+            }.toList()
         healthProfileRepository.saveAll(healthProfiles)
 
         val memberResponse = MemberResponse(member.id!!, member.role)
         val tokenResponse = TokenResponse(jwtFactory.createAccessToken(member))
         val inoculations = request.vaccinationInfo.vaccineList
-                .map { vaccine ->
-                    val vaccination = vaccinationRepository.findByVaccineName(vaccine.vaccineType)
-                            ?: throw BusinessException(VaccineError.UNKNOWN_VACCINE_REQUESTED).also { log.warn("추가되지 않은 백신: {$vaccine.vaccineType}") }
-                    Inoculation(vaccine.inoculationOrder, vaccine.inoculationOrderString, vaccine.date, vaccine.agency, vaccine.vaccineName, vaccine.vaccineBrandName, vaccine.lotNumber, member, vaccination)
-                }.toList()
+            .map { vaccine ->
+                val vaccination = vaccinationRepository.findByVaccineName(vaccine.vaccineType) ?: return null
+                if (vaccination != null) {
+                    Inoculation(
+                        vaccine.inoculationOrder,
+                        vaccine.inoculationOrderString,
+                        vaccine.date,
+                        vaccine.agency,
+                        vaccine.vaccineName,
+                        vaccine.vaccineBrandName,
+                        vaccine.lotNumber,
+                        member,
+                        vaccination
+                    )
+                } else {
+                    log.warn("추가해야 하는 백신 : {} {} {}",vaccine.vaccineType, vaccine, vaccine.vaccineName)
+                    null
+                }
+            }.filterNotNull().toList()
 
         inoculationRepository.saveAll(inoculations)
         member.addInoculations(inoculations)
