@@ -1,5 +1,6 @@
 package com.vacgom.backend.search.application
 
+import com.vacgom.backend.auth.domain.constants.Role
 import com.vacgom.backend.disease.application.DiseaseService
 import com.vacgom.backend.disease.domain.Disease
 import com.vacgom.backend.disease.domain.constants.AgeCondition
@@ -11,26 +12,29 @@ import com.vacgom.backend.inoculation.infrastructure.persistence.InoculationRepo
 import com.vacgom.backend.inoculation.infrastructure.persistence.VaccinationRepository
 import com.vacgom.backend.member.exception.MemberError
 import com.vacgom.backend.member.infrastructure.persistence.MemberRepository
-import com.vacgom.backend.search.application.dto.DiseaseSearchResponse
-import com.vacgom.backend.search.application.dto.VaccinationSearchResponse
+import com.vacgom.backend.search.application.dto.response.DiseaseSearchResponse
+import com.vacgom.backend.search.application.dto.response.SupportVaccineResponse
+import com.vacgom.backend.search.application.dto.response.VaccinationSearchResponse
+import org.slf4j.Logger
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.util.*
 
 @Service
 class SearchService(
-        val vaccinationRepository: VaccinationRepository,
-        val inoculationRepository: InoculationRepository,
-        val memberRepository: MemberRepository,
-        val diseaseService: DiseaseService,
+    val vaccinationRepository: VaccinationRepository,
+    val inoculationRepository: InoculationRepository,
+    val memberRepository: MemberRepository,
+    val diseaseService: DiseaseService,
+    val log: Logger
 ) {
     private fun findAllVaccinations(): List<Vaccination> {
         return vaccinationRepository.findAll()
     }
 
     fun searchDisease(
-            age: List<AgeCondition>,
-            condition: List<HealthCondition>,
+        age: List<AgeCondition>,
+        condition: List<HealthCondition>,
     ): List<DiseaseSearchResponse> {
         val diseases = diseaseService.findAll()
 
@@ -40,9 +44,9 @@ class SearchService(
     }
 
     fun searchVaccination(
-            age: List<AgeCondition>,
-            condition: List<HealthCondition>,
-            type: VaccinationType,
+        age: List<AgeCondition>,
+        condition: List<HealthCondition>,
+        type: VaccinationType,
     ): List<VaccinationSearchResponse> {
         val diseases = this.searchDisease(age, condition)
         val vaccinations = findAllVaccinations()
@@ -55,38 +59,38 @@ class SearchService(
 
     fun searchRecommendVaccination(memberId: UUID): List<VaccinationSearchResponse> {
         val member =
-                memberRepository.findById(memberId).orElseThrow {
-                    BusinessException(MemberError.NOT_FOUND)
-                }
+            memberRepository.findById(memberId).orElseThrow {
+                BusinessException(MemberError.NOT_FOUND)
+            }
 
         val ageCondition =
-                AgeCondition.getAgeCondition(member.memberDetails?.birthday?.year!!.minus(LocalDate.now().year))
+            AgeCondition.getAgeCondition(member.memberDetails?.birthday?.year!!.minus(LocalDate.now().year))
         val vaccinations = findAllVaccinations()
         val inoculatedDiseaseName =
-                inoculationRepository.findDistinctDiseaseNameByMemberId(memberId).flatMap { it.split("·") }.toSet()
+            inoculationRepository.findDistinctDiseaseNameByMemberId(memberId).flatMap { it.split("·") }.toSet()
         val recommendedVaccinations =
-                vaccinations.filter { vaccination -> !inoculatedDiseaseName.contains(vaccination.vaccineName) }
+            vaccinations.filter { vaccination -> !inoculatedDiseaseName.contains(vaccination.vaccineName) }
 
         val healthProfiles = member.healthProfiles.map { it.healthCondition }.toList()
 
         val diseases =
-                this.searchDisease(listOf(ageCondition), healthProfiles).filter { response ->
-                    !inoculatedDiseaseName.contains(response.name)
-                }.toList()
+            this.searchDisease(listOf(ageCondition), healthProfiles).filter { response ->
+                !inoculatedDiseaseName.contains(response.name)
+            }.toList()
         return filterByDisease(recommendedVaccinations, diseases)
     }
 
     private fun filterByDisease(
-            vaccinations: List<Vaccination>,
-            diseases: List<DiseaseSearchResponse>,
+        vaccinations: List<Vaccination>,
+        diseases: List<DiseaseSearchResponse>,
     ) = vaccinations.filter {
         diseases.any { disease -> it.diseaseName.contains(disease.name) }
     }.map { VaccinationSearchResponse.of(it) }
 
     fun isMatched(
-            disease: Disease,
-            age: List<AgeCondition>,
-            condition: List<HealthCondition>,
+        disease: Disease,
+        age: List<AgeCondition>,
+        condition: List<HealthCondition>,
     ): Boolean {
         var conditionValue = 0
         condition.forEach {
@@ -104,5 +108,15 @@ class SearchService(
                                 disease.healthConditionFilter and conditionValue > 0 &&
                                 disease.forbiddenHealthConditionFilter and conditionValue == 0
                         )
+    }
+
+    fun getInoculatedRatioResponse(): SupportVaccineResponse {
+        val membersCount = memberRepository.countMembersByRole(Role.ROLE_USER)
+        val hpvCount = inoculationRepository.findInoculationsByDiseaseName("사람유듀종바이러스감염증")
+        val tt = hpvCount.count()
+
+        log.warn("membersCount : {$membersCount}")
+        log.warn("hpvCount : {$tt}")
+        return SupportVaccineResponse(30, 30)
     }
 }

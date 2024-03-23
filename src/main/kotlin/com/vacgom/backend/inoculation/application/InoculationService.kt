@@ -42,6 +42,7 @@ class InoculationService(
         return vaccinations.map { vaccination ->
             val vaccineOrders = hashMap[vaccination.vaccineName]?.toHashSet()?.toList() ?: listOf()
             val isCompleted = vaccineOrders.any { order -> order == vaccination.maxOrder }
+
             InoculationSimpleResponse(
                 vaccination.diseaseName,
                 vaccination.vaccineName,

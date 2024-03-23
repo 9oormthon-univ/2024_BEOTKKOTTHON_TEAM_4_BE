@@ -1,4 +1,4 @@
-package com.vacgom.backend.search.application.dto
+package com.vacgom.backend.search.application.dto.response
 
 import com.vacgom.backend.inoculation.domain.Vaccination
 

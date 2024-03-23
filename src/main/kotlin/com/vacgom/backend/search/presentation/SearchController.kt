@@ -6,7 +6,8 @@ import com.vacgom.backend.disease.domain.constants.HealthCondition
 import com.vacgom.backend.global.security.annotation.AuthId
 import com.vacgom.backend.inoculation.domain.constants.VaccinationType
 import com.vacgom.backend.search.application.SearchService
-import com.vacgom.backend.search.application.dto.VaccinationSearchResponse
+import com.vacgom.backend.search.application.dto.response.SupportVaccineResponse
+import com.vacgom.backend.search.application.dto.response.VaccinationSearchResponse
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.util.*
@@ -65,5 +66,11 @@ class SearchController(
     @GetMapping("/certificate")
     fun getCertificate(@AuthId id: UUID): ResponseEntity<List<VaccinationSearchResponse>> {
         return ResponseEntity.ok(searchService.searchRecommendVaccination(id))
+    }
+
+    @GetMapping("/ratio")
+    fun getRatios(): ResponseEntity<SupportVaccineResponse> {
+        val response = searchService.getInoculatedRatioResponse()
+        return ResponseEntity.ok(response)
     }
 }

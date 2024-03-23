@@ -1,7 +1,7 @@
 package com.vacgom.backend.disease.application.dto.response
 
 import com.vacgom.backend.disease.domain.Disease
-import com.vacgom.backend.search.application.dto.QnaResponse
+import com.vacgom.backend.search.application.dto.response.QnaResponse
 
 class DiseaseResponse(
     val id: Long?,
