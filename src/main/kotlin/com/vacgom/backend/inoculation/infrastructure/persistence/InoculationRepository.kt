@@ -11,6 +11,14 @@ interface InoculationRepository : JpaRepository<Inoculation, UUID> {
         "select i " +
             "from Inoculation i " +
             "where i.member.id = :memberId " +
+            "order by i.date desc",
+    )
+    fun findInoculationsByMemberId(memberId: UUID): List<Inoculation>
+
+    @Query(
+        "select i " +
+            "from Inoculation i " +
+            "where i.member.id = :memberId " +
             "and i.vaccination.vaccinationType = :vaccinationType",
     )
     fun findInoculationsByMemberIdAndVaccinationType(
@@ -41,8 +49,7 @@ interface InoculationRepository : JpaRepository<Inoculation, UUID> {
     @Query(
         "SELECT i " +
             "FROM Inoculation i JOIN i.vaccination v " +
-            "GROUP BY i.vaccination.id " +
-            "HAVING i.member.id = :memberId " +
+            "WHERE i.member.id = :memberId " +
             "ORDER BY i.inoculationOrder DESC",
     )
     fun findDistinctLatestInoculationsByMemberId(memberId: UUID): List<Inoculation>

@@ -70,13 +70,13 @@ class InoculationService(
     ): List<InoculationDetailResponse> {
         val validatedVaccinationType = VaccinationType.valueOf(vaccinationType.uppercase())
         val inoculations = (
-                inoculationRepository.findInoculationsByMemberIdAndVaccinationTypeAndDiseaseName(
-                    memberId,
-                    validatedVaccinationType,
-                    request.name,
-                )
-                    ?: throw BusinessException(GlobalError.GLOBAL_NOT_FOUND)
-                )
+            inoculationRepository.findInoculationsByMemberIdAndVaccinationTypeAndDiseaseName(
+                memberId,
+                validatedVaccinationType,
+                request.name,
+            )
+                ?: throw BusinessException(GlobalError.GLOBAL_NOT_FOUND)
+        )
 
         return inoculations.map {
             InoculationDetailResponse(
@@ -92,16 +92,25 @@ class InoculationService(
     }
 
     fun getCertificates(memberId: UUID): List<InoculationCertificateResponse> {
-        val inoculations = inoculationRepository.findDistinctLatestInoculationsByMemberId(memberId)
-        val sortedByDescending = inoculations.sortedByDescending { it.date }
-        return sortedByDescending.map {
+        val inoculations1 = inoculationRepository.findInoculationsByMemberId(memberId)
+        val diseases = inoculations1.map { it.vaccination.diseaseName }.toSet()
+
+        val map: MutableMap<String, Inoculation> = mutableMapOf()
+
+        inoculations1.forEach {
+            if (!map.containsKey(it.vaccination.diseaseName)) {
+                map[it.vaccination.diseaseName] = it
+            }
+        }
+
+        return map.map {
             InoculationCertificateResponse(
                 memberId.toString(),
-                it.vaccination.id.toString(),
-                it.vaccination.diseaseName,
-                it.vaccination.vaccineName,
-                it.date,
-                it.vaccination.certificationIcon,
+                it.value.vaccination.id.toString(),
+                it.value.vaccination.diseaseName,
+                it.value.vaccination.vaccineName,
+                it.value.date,
+                it.value.vaccination.certificationIcon,
             )
         }.toList()
     }
@@ -111,20 +120,23 @@ class InoculationService(
         val member =
             memberRepository.findMemberByNickname(Nickname(name)) ?: throw BusinessException(MemberError.NOT_FOUND)
 
-        val eventVaccination = vaccinationRepository.findById(UUID.fromString("30784537-3331-3646-3734-453738383131"))
-            .orElseThrow { BusinessException(GlobalError.GLOBAL_NOT_FOUND) }
+        val eventVaccination =
+            vaccinationRepository.findById(UUID.fromString("30784537-3331-3646-3734-453738383131"))
+                .orElseThrow { BusinessException(GlobalError.GLOBAL_NOT_FOUND) }
 
-        inoculationRepository.save(Inoculation(
-            1,
-            "이벤트",
-            LocalDate.now(),
-            "백신아 곰아워!",
-            "이벤트 백신",
-            "아프지 말라곰",
-            "https://vacgom.co.kr",
-            member,
-            eventVaccination
-        ))
+        inoculationRepository.save(
+            Inoculation(
+                1,
+                "이벤트",
+                LocalDate.now(),
+                "백신아 곰아워!",
+                "이벤트 백신",
+                "아프지 말라곰",
+                "https://vacgom.co.kr",
+                member,
+                eventVaccination,
+            ),
+        )
         notificationService.sendNotification(member.id!!, "이벤트 백신 접종 증명서가 발신되었어요!", "ㅎㅅㅎ")
     }
 }
