@@ -148,5 +148,5 @@ class SearchService(
 
         return SupportVaccineResponse(influenzaPercentage.toLong(), hpvPercentage.toLong())
     }
-}.
+}
 
