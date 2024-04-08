@@ -1,4 +1,4 @@
-name: Deploy Pipe
+name: CD
 
 on:
   push:
@@ -13,7 +13,7 @@ permissions:
 jobs:
   deploy_develop:
     runs-on: ubuntu-latest
-    name: Deploy to Amazon ECS (Develop)
+    name: Deploy to Amazon ECS
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
