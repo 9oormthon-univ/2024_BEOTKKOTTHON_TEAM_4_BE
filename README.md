@@ -46,6 +46,7 @@
 
 <br>
 <br>
+<br>
 
 ### 🐻‍❄️ 서비스 소개 🐻‍❄
 
@@ -71,7 +72,7 @@
 
 <br>
 
-### 🛠️ System Architecture
+### 🛠️ System Architecture 🛠
 
 <br>
 
