@@ -2,16 +2,15 @@
 
 ![header](https://capsule-render.vercel.app/api?type=waving&height=300&color=0:4096FD,50:57A3FF,100:0073FE&text=[%20백신아%20곰아워!%20:%20백곰%20🐻‍❄️%20]&desc=2024%20Kakao%20X%209oorm%20벚꽃톤%20최우수상%20&descAlignY=56&descAlign=50&fontAlign=51&fontAlignY=40&fontSize=50&fontColor=ffffff)
 
-#### 🏆 2024 Kakao X goorm <벚꽃톤> 최우수상 수상(37팀 중 2위) 🏆<br>
-
-💉 20대 백신 접종률 향상을 위한 백신 조회 및 추천 서비스<br><b>< 백신아 곰아워 : 백곰 🐻‍❄️> 💉</b>
+<b>< 백신아 곰아워 : 백곰 🐻‍❄️> 💉</b><br>💉 20대 백신 접종률 향상을 위한 백신 조회 및 추천 서비스
+<br><br><b>🏆 2024 Kakao X goorm <벚꽃톤> 최우수상 수상</b>&nbsp;(37팀 중 2위) 🏆<br>
 
 <br>
 
 <img src="https://github.com/goormthon-Univ/2024_BEOTKKOTTHON_TEAM_4_FE/assets/53892427/c89039ca-a866-452c-b372-79537abbc4d0" width="60%"/>
 <br/><br/>
 
-배포 사이트 : https://vacgom.co.kr<br>**(8월 구름톤 제주에서 Grand Open 예정)**
+<b>배포 사이트</b> : https://vacgom.co.kr<br>**(8월 구름톤 제주에서 Grand Open 예정)**
 
 <br>
 
@@ -22,16 +21,12 @@
 <table>
 	<th align="center" colspan="2">Backend</th>
   <tr>
-   <td align="center"><a href="https://github.com/h-beeen"><img src="https://avatars.githubusercontent.com/u/112257466?v=4" width="180px; style="vertical-align:top" alt=""/>
-   <td align="center"><a href="https://github.com/HyungJu"><img src="https://avatars.githubusercontent.com/u/9509286?v=4" width="180px;" style="vertical-align:top" alt=""/>
+   <td align="center"><a href="https://github.com/h-beeen"><img src="https://github.com/9oormthon-univ/2024_BEOTKKOTTHON_TEAM_4_BE/assets/112257466/13c6dd43-3831-4680-baa2-e6c673a8eb49"/></a></td>
+   <td align="center"><a href="https://github.com/HyungJu"><img src="https://github.com/9oormthon-univ/2024_BEOTKKOTTHON_TEAM_4_BE/assets/112257466/83851a68-d937-4938-9903-9042bbfb6bcd"/></a></td>
   </tr>
     <tr>
-	 <td align="center">변해빈<br><a href="https://github.com/h-beeen"><img src="https://skillicons.dev/icons?i=github" width="12px" alt="_icon" />&nbsp;h-beeen</a></td>
-	 <td align="center">성형주<br><a href="https://github.com/HyungJu"><img src="https://skillicons.dev/icons?i=github" width="12px" alt="_icon" />&nbsp;HyungJu</a></td>
-    </tr>    
-    <tr>
-	 <td align="center"><a href="mailto:dan@vacgom.co.kr"/>📧 dan@vacgom.co.kr</td>
-	 <td align="center"><a href="mailto:jude@vacgom.co.kr"/>📧 jude@vacgom.co.kr</td>
+	 <td align="center">변해빈&nbsp;|&nbsp;<a href="https://github.com/h-beeen"><img src="https://skillicons.dev/icons?i=github" width="12px" alt="_icon" />&nbsp;h-beeen</a><br><a href="mailto:dan@vacgom.co.kr"/>dan@vacgom.co.kr</td>
+	 <td align="center">성형주&nbsp;|&nbsp;<a href="https://github.com/HyungJu"><img src="https://skillicons.dev/icons?i=github" width="12px" alt="_icon" />&nbsp;HyungJu</a><br><a href="mailto:jude@vacgom.co.kr"/>jude@vacgom.co.kr</td>
     </tr>
 </table>
 
