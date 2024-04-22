@@ -30,6 +30,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.flywaydb:flyway-core")
@@ -76,11 +77,12 @@ jib {
         tags = setOf(imageTag)
     }
     container {
-        jvmFlags = listOf(
-                "-Dspring.profiles.active=${activeProfile}",
+        jvmFlags =
+            listOf(
+                "-Dspring.profiles.active=$activeProfile",
                 "-Dserver.port=8080",
                 "-XX:+UseContainerSupport",
-        )
+            )
         ports = listOf("8080")
     }
 }
