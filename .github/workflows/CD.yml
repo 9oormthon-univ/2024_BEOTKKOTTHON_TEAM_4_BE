@@ -55,7 +55,7 @@ jobs:
       - name: Download Task Definition
         run: |
           aws ecs describe-task-definition \
-          --task-definition vacgom-taskdef-dev \
+          --task-definition vacgom-taskdef \
           --query taskDefinition \
           > task-definition.json
 
@@ -64,15 +64,15 @@ jobs:
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
           task-definition: task-definition.json
-          container-name: backend
-          image: ${{ steps.login-ecr.outputs.registry }}/vacgom:${{ github.sha }}_dev
+          container-name: vacgom-backend
+          image: ${{ steps.login-ecr.outputs.registry }}/vacgom-ecr:${{ github.sha }}_dev
 
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
           task-definition: ${{ steps.task-def.outputs.task-definition }}
-          service: vacgom-service-dev
-          cluster: vacgom-cluster
+          service: vacgom-backend-service
+          cluster: vacgom-cluster-2
           wait-for-service-stability: true
 
       - name: Send Slack notification
