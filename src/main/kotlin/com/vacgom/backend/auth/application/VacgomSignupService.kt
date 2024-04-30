@@ -30,17 +30,18 @@ class VacgomSignupService(
     private val inoculationRepository: InoculationRepository,
     private val vaccinationRepository: VaccinationRepository,
     private val log: Logger,
-    private val jwtFactory: JwtFactory
+    private val jwtFactory: JwtFactory,
 ) {
     fun validateNickname(id: String) {
         val nickname = Nickname(id)
-        if (memberRepository.existsMemberByNickname(nickname))
+        if (memberRepository.existsMemberByNickname(nickname)) {
             throw BusinessException(NicknameError.DUPLICATED)
+        }
     }
 
     fun signUpVacgom(
         memberId: UUID,
-        request: SignUpRequest
+        request: SignUpRequest,
     ): AuthResponse? {
         val (nickname, healthConditions) = request.memberInfo
         val (name, birthday, sex, vaccines) = request.vaccinationInfo
@@ -53,34 +54,36 @@ class VacgomSignupService(
         member.updateMemberDetails(memberDetails)
         member.updateRole(Role.ROLE_USER)
 
-        val healthProfiles = healthConditions.stream()
-            .map { condition ->
-                HealthProfile(member, condition)
-            }.toList()
+        val healthProfiles =
+            healthConditions.stream()
+                .map { condition ->
+                    HealthProfile(member, condition)
+                }.toList()
         healthProfileRepository.saveAll(healthProfiles)
 
         val memberResponse = MemberResponse(member.id!!, member.role)
         val tokenResponse = TokenResponse(jwtFactory.createAccessToken(member))
-        val inoculations = request.vaccinationInfo.vaccineList
-            .map { vaccine ->
-                val vaccination = vaccinationRepository.findByVaccineName(vaccine.vaccineType) ?: return null
-                if (vaccination != null) {
-                    Inoculation(
-                        vaccine.inoculationOrder,
-                        vaccine.inoculationOrderString,
-                        vaccine.date,
-                        vaccine.agency,
-                        vaccine.vaccineName,
-                        vaccine.vaccineBrandName,
-                        vaccine.lotNumber,
-                        member,
-                        vaccination
-                    )
-                } else {
-                    log.warn("추가해야 하는 백신 : {} {} {}",vaccine.vaccineType, vaccine, vaccine.vaccineName)
-                    null
-                }
-            }.filterNotNull().toList()
+        val inoculations =
+            request.vaccinationInfo.vaccineList
+                .map { vaccine ->
+                    val vaccination = vaccinationRepository.findByVaccineName(vaccine.vaccineType)
+                    if (vaccination != null) {
+                        Inoculation(
+                            vaccine.inoculationOrder,
+                            vaccine.inoculationOrderString,
+                            vaccine.date,
+                            vaccine.agency,
+                            vaccine.vaccineName,
+                            vaccine.vaccineBrandName,
+                            vaccine.lotNumber,
+                            member,
+                            vaccination,
+                        )
+                    } else {
+                        log.warn("추가해야 하는 백신 : {} {} {}", vaccine.vaccineType, vaccine, vaccine.vaccineName)
+                        null
+                    }
+                }.filterNotNull().toList()
 
         inoculationRepository.saveAll(inoculations)
         member.addInoculations(inoculations)
