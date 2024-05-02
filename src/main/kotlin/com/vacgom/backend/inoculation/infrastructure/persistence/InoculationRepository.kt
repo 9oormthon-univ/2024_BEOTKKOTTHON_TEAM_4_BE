@@ -60,4 +60,6 @@ interface InoculationRepository : JpaRepository<Inoculation, UUID> {
             "where i.vaccination.diseaseName = :diseaseName",
     )
     fun findInoculationsByDiseaseName(diseaseName: String): List<Inoculation>
+
+    fun findFirstByVaccinationId(vaccinationId: UUID): Inoculation?
 }

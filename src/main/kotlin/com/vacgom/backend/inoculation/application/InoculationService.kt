@@ -17,7 +17,9 @@ import com.vacgom.backend.member.infrastructure.persistence.MemberRepository
 import com.vacgom.backend.notification.application.NotificationService
 import jakarta.transaction.Transactional
 import org.slf4j.Logger
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
+import org.springframework.web.client.RestTemplate
 import java.time.LocalDate
 import java.util.*
 
@@ -29,6 +31,7 @@ class InoculationService(
     private val memberRepository: MemberRepository,
     private val notificationService: NotificationService,
     private val log: Logger,
+    @Value("\${image-gen.url}") private val imageGenUrl: String,
 ) {
     fun getInoculationSimpleResponse(
         memberId: UUID,
@@ -113,6 +116,28 @@ class InoculationService(
                 it.value.vaccination.certificationIcon,
             )
         }.toList()
+    }
+
+    fun getCertificateImage(
+        userId: UUID,
+        inoculationId: String,
+    ): ByteArray {
+        val inoculation =
+            inoculationRepository.findFirstByVaccinationId(UUID.fromString(inoculationId))
+                ?: throw BusinessException(GlobalError.GLOBAL_NOT_FOUND)
+
+        if (inoculation.member.id != userId) {
+            throw BusinessException(GlobalError.GLOBAL_NOT_FOUND)
+        }
+
+        val restTemplate = RestTemplate()
+        return restTemplate.getForObject<ByteArray>(
+            imageGenUrl + "?diseaseName=${inoculation.vaccination.diseaseName}" +
+                "&vaccinationName=${inoculation.vaccination.vaccineName}" +
+                "&inoculationDate=${inoculation.date}" +
+                "&userId=${inoculation.member.nickname?.nickname}",
+            ByteArray::class.java,
+        ) ?: throw BusinessException(GlobalError.GLOBAL_NOT_FOUND)
     }
 
     fun addEventInoculation(memberNameRequest: MemberNameRequest) {

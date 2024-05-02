@@ -50,4 +50,13 @@ class InoculationController(
         val certificates = inoculationService.getCertificates(id)
         return ResponseEntity.ok(certificates.filter { it.vaccineId == vaccineId }.first())
     }
+
+    @GetMapping("/certificate/{vaccineId}/image", produces = ["image/png"])
+    fun getCertificateImage(
+        @AuthId id: UUID,
+        @PathVariable("vaccineId") vaccineId: String,
+    ): ByteArray {
+        val image = inoculationService.getCertificateImage(id, vaccineId)
+        return image
+    }
 }
