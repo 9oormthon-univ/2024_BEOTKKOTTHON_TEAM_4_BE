@@ -123,7 +123,7 @@ class InoculationService(
         inoculationId: String,
     ): ByteArray {
         val inoculation =
-            inoculationRepository.findFirstByVaccinationId(UUID.fromString(inoculationId))
+            inoculationRepository.findLastUserInoculation(UUID.fromString(inoculationId), userId)
                 ?: throw BusinessException(GlobalError.GLOBAL_NOT_FOUND)
 
         if (inoculation.member.id != userId) {

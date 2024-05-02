@@ -61,5 +61,14 @@ interface InoculationRepository : JpaRepository<Inoculation, UUID> {
     )
     fun findInoculationsByDiseaseName(diseaseName: String): List<Inoculation>
 
-    fun findFirstByVaccinationId(vaccinationId: UUID): Inoculation?
+    @Query(
+        "SELECT i from Inoculation i " +
+            "where i.vaccination.id = :vaccinationId " +
+            "and i.member.id = :memberId " +
+            "ORDER BY i.date DESC, i.inoculationOrder DESC LIMIT 1",
+    )
+    fun findLastUserInoculation(
+        vaccinationId: UUID,
+        memberId: UUID,
+    ): Inoculation?
 }
