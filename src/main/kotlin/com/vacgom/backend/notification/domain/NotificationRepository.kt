@@ -4,5 +4,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 import java.util.*
 
 interface NotificationRepository : JpaRepository<Notification, Long> {
-    fun findAllByMemberId(memberId: UUID): List<Notification>
+    fun findAllByMemberIdOrderByCreatedAt(memberId: UUID): List<Notification>
 }

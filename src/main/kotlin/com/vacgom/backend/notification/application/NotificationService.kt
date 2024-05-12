@@ -14,11 +14,11 @@ class NotificationService(
     private val memberService: MemberService,
 ) {
     fun getAllNotifications(memberId: UUID): List<Notification> {
-        return notificationRepository.findAllByMemberId(memberId)
+        return notificationRepository.findAllByMemberIdOrderByCreatedAt(memberId)
     }
 
     fun getAllUnreadNotifications(memberId: UUID): List<Notification> {
-        return notificationRepository.findAllByMemberId(memberId).filter { it.isRead == false }
+        return notificationRepository.findAllByMemberIdOrderByCreatedAt(memberId).filter { it.isRead == false }
     }
 
     fun setAsRead(notificationId: Long) {
@@ -31,7 +31,7 @@ class NotificationService(
 
     fun setAllAsRead(memberId: UUID) {
         val notifications =
-            notificationRepository.findAllByMemberId(memberId).map {
+            notificationRepository.findAllByMemberIdOrderByCreatedAt(memberId).map {
                 it.isRead = true
                 it
             }
@@ -44,6 +44,13 @@ class NotificationService(
         type: String,
     ): Notification {
         val member = memberService.findMember(memberId) ?: throw BusinessException(MemberError.NOT_FOUND)
-        return notificationRepository.save(Notification(member = member, content = content, type = type))
+        return notificationRepository.save(
+            Notification(
+                member = member,
+                content = content,
+                type = type,
+                createdAt = Date(),
+            ),
+        )
     }
 }
