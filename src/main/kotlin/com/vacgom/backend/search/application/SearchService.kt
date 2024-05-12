@@ -76,7 +76,7 @@ class SearchService(
         return this.isInJeolGi(inoculations.first().date)
     }
 
-    fun searchRecommendVaccination(memberId: UUID): List<VaccinationSearchResponse> {
+    fun searchRecommendVaccination(memberId: UUID): List<DiseaseSearchResponse> {
         val member =
             memberRepository.findById(memberId).orElseThrow {
                 BusinessException(MemberError.NOT_FOUND)
@@ -92,15 +92,13 @@ class SearchService(
 
         val healthProfiles = member.healthProfiles.map { it.healthCondition }.toList()
 
-        val diseases =
-            this.searchDisease(listOf(ageCondition), healthProfiles).filter { response ->
-                (
-                    (response.name == "인플루엔자" && this.userVaccinatedIIV(memberId)) ||
-                        response.name != "인플루엔자"
-                ) &&
-                    !inoculatedDiseaseName.contains(response.name)
-            }.toList()
-        return filterByDisease(recommendedVaccinations, diseases)
+        return this.searchDisease(listOf(ageCondition), healthProfiles).filter { response ->
+            (
+                (response.name == "인플루엔자" && this.userVaccinatedIIV(memberId)) ||
+                    response.name != "인플루엔자"
+            ) &&
+                !inoculatedDiseaseName.contains(response.name)
+        }.toList()
     }
 
     private fun filterByDisease(
@@ -149,4 +147,3 @@ class SearchService(
         return SupportVaccineResponse(influenzaPercentage.toLong(), hpvPercentage.toLong())
     }
 }
-

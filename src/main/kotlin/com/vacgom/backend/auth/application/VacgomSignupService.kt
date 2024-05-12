@@ -64,26 +64,25 @@ class VacgomSignupService(
         val memberResponse = MemberResponse(member.id!!, member.role)
         val tokenResponse = TokenResponse(jwtFactory.createAccessToken(member))
         val inoculations =
-            request.vaccinationInfo.vaccineList
-                .map { vaccine ->
-                    val vaccination = vaccinationRepository.findByVaccineName(vaccine.vaccineType)
-                    if (vaccination != null) {
-                        Inoculation(
-                            vaccine.inoculationOrder,
-                            vaccine.inoculationOrderString,
-                            vaccine.date,
-                            vaccine.agency,
-                            vaccine.vaccineName,
-                            vaccine.vaccineBrandName,
-                            vaccine.lotNumber,
-                            member,
-                            vaccination,
-                        )
-                    } else {
-                        log.warn("추가해야 하는 백신 : {} {} {}", vaccine.vaccineType, vaccine, vaccine.vaccineName)
-                        null
-                    }
-                }.filterNotNull().toList()
+            request.vaccinationInfo.vaccineList.mapNotNull { vaccine ->
+                val vaccination = vaccinationRepository.findByVaccineName(vaccine.vaccineType)
+                if (vaccination != null) {
+                    Inoculation(
+                        vaccine.inoculationOrder,
+                        vaccine.inoculationOrderString,
+                        vaccine.date,
+                        vaccine.agency,
+                        vaccine.vaccineName,
+                        vaccine.vaccineBrandName,
+                        vaccine.lotNumber,
+                        member,
+                        vaccination,
+                    )
+                } else {
+                    log.warn("추가해야 하는 백신 : {} {} {}", vaccine.vaccineType, vaccine, vaccine.vaccineName)
+                    null
+                }
+            }.toList()
 
         inoculationRepository.saveAll(inoculations)
         member.addInoculations(inoculations)
