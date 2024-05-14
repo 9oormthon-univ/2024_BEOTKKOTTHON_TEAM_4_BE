@@ -40,10 +40,12 @@ class InoculationService(
     ): List<InoculationSimpleResponse> {
         val vaccinations =
             if (request.vaccinations.isEmpty()) {
-                vaccinationRepository.findAll()
+                vaccinationRepository.findAll().filter {
+                    it.vaccinationType == request.type
+                }
             } else {
                 vaccinationRepository.findAll().filter {
-                    it.vaccineName in request.vaccinations
+                    it.vaccineName in request.vaccinations && it.vaccinationType == request.type
                 }
             }
 
