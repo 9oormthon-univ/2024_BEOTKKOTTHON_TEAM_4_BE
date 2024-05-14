@@ -11,6 +11,7 @@ import com.vacgom.backend.inoculation.domain.Inoculation
 import com.vacgom.backend.inoculation.domain.constants.VaccinationType
 import com.vacgom.backend.inoculation.infrastructure.persistence.InoculationRepository
 import com.vacgom.backend.inoculation.infrastructure.persistence.VaccinationRepository
+import com.vacgom.backend.inoculation.presentation.dto.InoculationSimpleRequest
 import com.vacgom.backend.member.domain.Nickname
 import com.vacgom.backend.member.exception.MemberError
 import com.vacgom.backend.member.infrastructure.persistence.MemberRepository
@@ -35,12 +36,19 @@ class InoculationService(
 ) {
     fun getInoculationSimpleResponse(
         memberId: UUID,
-        vaccinationType: String,
+        request: InoculationSimpleRequest,
     ): List<InoculationSimpleResponse> {
-        val validatedVaccinationType = VaccinationType.valueOf(vaccinationType.uppercase())
-        val vaccinations = vaccinationRepository.findAllByVaccinationType(validatedVaccinationType)
+        val vaccinations =
+            if (request.vaccinations.isEmpty()) {
+                vaccinationRepository.findAll()
+            } else {
+                vaccinationRepository.findAll().filter {
+                    it.vaccineName in request.vaccinations
+                }
+            }
+
         val inoculations =
-            inoculationRepository.findInoculationsByMemberIdAndVaccinationType(memberId, validatedVaccinationType)
+            inoculationRepository.findInoculationsByMemberId(memberId)
 
         val hashMap = HashMap<String, MutableList<Long>>()
         inoculations.forEach { inoculation ->

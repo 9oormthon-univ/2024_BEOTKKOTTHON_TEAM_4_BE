@@ -6,6 +6,7 @@ import com.vacgom.backend.inoculation.application.dto.request.DiseaseNameRequest
 import com.vacgom.backend.inoculation.application.dto.response.InoculationCertificateResponse
 import com.vacgom.backend.inoculation.application.dto.response.InoculationDetailResponse
 import com.vacgom.backend.inoculation.application.dto.response.InoculationSimpleResponse
+import com.vacgom.backend.inoculation.presentation.dto.InoculationSimpleRequest
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.util.*
@@ -18,9 +19,9 @@ class InoculationController(
     @GetMapping("/simple")
     fun getInoculationSimpleResponse(
         @AuthId id: UUID,
-        @RequestParam type: String,
+        @RequestBody request: InoculationSimpleRequest,
     ): ResponseEntity<List<InoculationSimpleResponse>> {
-        val responses = inoculationService.getInoculationSimpleResponse(id, type)
+        val responses = inoculationService.getInoculationSimpleResponse(id, request)
         return ResponseEntity.ok(responses)
     }
 
