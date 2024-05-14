@@ -16,7 +16,7 @@ import java.util.*
 class InoculationController(
     private val inoculationService: InoculationService,
 ) {
-    @GetMapping("/simple")
+    @PostMapping("/simple")
     fun getInoculationSimpleResponse(
         @AuthId id: UUID,
         @RequestBody request: InoculationSimpleRequest,
