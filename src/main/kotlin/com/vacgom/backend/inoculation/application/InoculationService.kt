@@ -66,6 +66,7 @@ class InoculationService(
             val isCompleted = vaccineOrders.any { order -> order == vaccination.maxOrder }
 
             InoculationSimpleResponse(
+                vaccination.id.toString(),
                 vaccination.diseaseName,
                 vaccination.vaccineName,
                 vaccination.minOrder,
@@ -93,6 +94,7 @@ class InoculationService(
 
         return inoculations.map {
             InoculationDetailResponse(
+                it.vaccination.id.toString(),
                 it.vaccination.vaccineName,
                 it.inoculationOrderString,
                 it.agency,
