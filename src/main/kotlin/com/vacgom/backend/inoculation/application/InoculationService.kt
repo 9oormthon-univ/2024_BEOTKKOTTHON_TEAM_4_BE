@@ -39,7 +39,7 @@ class InoculationService(
         request: InoculationSimpleRequest,
     ): List<InoculationSimpleResponse> {
         val vaccinations =
-            if (request.vaccinations.isEmpty()) {
+            if (request.vaccinations.isNullOrEmpty()) {
                 vaccinationRepository.findAll().filter {
                     it.vaccinationType == request.type
                 }
