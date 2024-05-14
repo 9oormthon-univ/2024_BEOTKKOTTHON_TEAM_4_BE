@@ -10,23 +10,43 @@ import java.util.*
 
 @Service
 class VaccineService(
-        val vaccineRepository: VaccinationRepository,
-        val diseaseService: DiseaseService,
+    val vaccineRepository: VaccinationRepository,
+    val diseaseService: DiseaseService,
 ) {
+    fun getAllVaccines(): List<VaccineResponse> {
+        val vaccines = this.vaccineRepository.findAll()
+        val diseases = this.diseaseService.findAll()
+
+        return vaccines.map { vaccine ->
+            VaccineResponse(
+                id = vaccine.id?.toString(),
+                name = vaccine.vaccineName,
+                diseases =
+                    diseases.filter { vaccine.diseaseName.contains(it.name) }
+                        .mapNotNull { it.id }
+                        .toList(),
+                diseaseName = vaccine.diseaseName,
+                type = vaccine.vaccinationType,
+            )
+        }
+    }
+
     fun getVaccine(id: String): VaccineResponse {
         val vaccine =
-                vaccineRepository.findById(UUID.fromString(id))
-                        .orElseThrow { throw BusinessException(VaccineError.UNKNOWN_VACCINE_REQUESTED) }
+            vaccineRepository.findById(UUID.fromString(id))
+                .orElseThrow { throw BusinessException(VaccineError.UNKNOWN_VACCINE_REQUESTED) }
 
         val diseases = diseaseService.findAll()
 
         return VaccineResponse(
-                id = vaccine.id?.toString(),
-                name = vaccine.vaccineName,
-                diseases =
+            id = vaccine.id?.toString(),
+            name = vaccine.vaccineName,
+            diseases =
                 diseases.filter { vaccine.diseaseName.contains(it.name) }
-                        .mapNotNull { it.id }
-                        .toList(),
+                    .mapNotNull { it.id }
+                    .toList(),
+            diseaseName = vaccine.diseaseName,
+            type = vaccine.vaccinationType,
         )
     }
 }

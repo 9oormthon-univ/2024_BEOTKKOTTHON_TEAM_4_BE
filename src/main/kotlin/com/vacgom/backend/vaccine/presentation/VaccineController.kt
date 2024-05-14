@@ -19,4 +19,9 @@ class VaccineController(
     ): ResponseEntity<VaccineResponse> {
         return ResponseEntity.ok(vaccineService.getVaccine(id))
     }
+
+    @GetMapping()
+    fun getAllVaccines(): ResponseEntity<List<VaccineResponse>> {
+        return ResponseEntity.ok(vaccineService.getAllVaccines())
+    }
 }
