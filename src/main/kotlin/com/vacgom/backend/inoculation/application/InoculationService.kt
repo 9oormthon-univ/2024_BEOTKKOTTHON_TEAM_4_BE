@@ -124,6 +124,7 @@ class InoculationService(
                 it.vaccination.vaccineName,
                 it.date,
                 it.vaccination.certificationIcon,
+                it.vaccination.vaccinationType,
             )
         }.toList()
     }
