@@ -2,6 +2,7 @@ package com.vacgom.backend.inoculation.application.dto.response
 
 data class InoculationSimpleResponse(
     val vaccineId: String,
+    val diseaseId: Long?,
     val diseaseName: String,
     val vaccineName: String,
     val minOrder: Long,

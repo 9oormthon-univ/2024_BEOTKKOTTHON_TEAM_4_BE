@@ -1,5 +1,6 @@
 package com.vacgom.backend.inoculation.application
 
+import com.vacgom.backend.disease.application.DiseaseService
 import com.vacgom.backend.global.exception.error.BusinessException
 import com.vacgom.backend.global.exception.error.GlobalError
 import com.vacgom.backend.inoculation.application.dto.request.DiseaseNameRequest
@@ -33,6 +34,7 @@ class InoculationService(
     private val notificationService: NotificationService,
     private val log: Logger,
     @Value("\${image-gen.url}") private val imageGenUrl: String,
+    private val diseaseService: DiseaseService,
 ) {
     fun getInoculationSimpleResponse(
         memberId: UUID,
@@ -61,12 +63,17 @@ class InoculationService(
             hashMap[vaccineName]!!.add(inoculationOrder)
         }
 
+        val diseases = diseaseService.findAll()
+
         return vaccinations.map { vaccination ->
             val vaccineOrders = hashMap[vaccination.vaccineName]?.toHashSet()?.toList() ?: listOf()
             val isCompleted = vaccineOrders.any { order -> order == vaccination.maxOrder }
 
+            val disease = diseases.find { vaccination.diseaseName.contains(it.name) }
+
             InoculationSimpleResponse(
                 vaccination.id.toString(),
+                disease?.id,
                 vaccination.diseaseName,
                 vaccination.vaccineName,
                 vaccination.minOrder,
