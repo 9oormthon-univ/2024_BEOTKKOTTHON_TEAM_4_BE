@@ -108,24 +108,22 @@ class InoculationService(
 
     fun getCertificates(memberId: UUID): List<InoculationCertificateResponse> {
         val inoculations1 = inoculationRepository.findInoculationsByMemberId(memberId)
-        val diseases = inoculations1.map { it.vaccination.diseaseName }.toSet()
 
-        val map: MutableMap<String, Inoculation> = mutableMapOf()
-
-        inoculations1.forEach {
-            if (!map.containsKey(it.vaccination.diseaseName)) {
-                map[it.vaccination.diseaseName] = it
+        val group =
+            inoculations1.groupBy {
+                it.vaccination.vaccineName
+            }.map {
+                it.value.last()
             }
-        }
 
-        return map.map {
+        return group.map {
             InoculationCertificateResponse(
                 memberId.toString(),
-                it.value.vaccination.id.toString(),
-                it.value.vaccination.diseaseName,
-                it.value.vaccination.vaccineName,
-                it.value.date,
-                it.value.vaccination.certificationIcon,
+                it.vaccination.id.toString(),
+                it.vaccination.diseaseName,
+                it.vaccination.vaccineName,
+                it.date,
+                it.vaccination.certificationIcon,
             )
         }.toList()
     }
