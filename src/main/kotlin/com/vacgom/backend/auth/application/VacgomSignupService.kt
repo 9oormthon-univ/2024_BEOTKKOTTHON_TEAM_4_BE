@@ -111,19 +111,19 @@ class VacgomSignupService(
 
         notificationService.sendNotification(
             memberId,
-            "${member.nickname}님을 위한 백신이 ${recommendedDiseases.size}개 있어요!",
+            "${member.nickname?.nickname}님을 위한 백신이 ${recommendedDiseases.size}개 있어요!",
             "vaccine",
         )
 
         notificationService.sendNotification(
             memberId,
-            "${member.nickname}님의 접종 인증서가 ${inoculations.size}개 발급됐어요",
+            "${member.nickname?.nickname}님의 접종 인증서가 ${inoculations.size}개 발급됐어요",
             "vaccine",
         )
 
         notificationService.sendNotification(
             memberId,
-            "${member.nickname}님! 백곰 가입을 환영해요 :)",
+            "${member.nickname?.nickname}님! 백곰 가입을 환영해요 :)",
             "success",
         )
         return AuthResponse(true, memberResponse, tokenResponse)
