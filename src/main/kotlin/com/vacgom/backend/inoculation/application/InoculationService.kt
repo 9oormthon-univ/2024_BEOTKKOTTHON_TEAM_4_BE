@@ -113,7 +113,10 @@ class InoculationService(
         }.toList()
     }
 
-    fun getCertificates(memberId: UUID): List<InoculationCertificateResponse> {
+    fun getCertificates(
+        memberId: UUID,
+        orderBy: String,
+    ): List<InoculationCertificateResponse> {
         val inoculations1 = inoculationRepository.findInoculationsByMemberId(memberId)
 
         val group =
@@ -123,17 +126,24 @@ class InoculationService(
                 it.value.last()
             }
 
-        return group.map {
-            InoculationCertificateResponse(
-                memberId.toString(),
-                it.vaccination.id.toString(),
-                it.vaccination.diseaseName,
-                it.vaccination.vaccineName,
-                it.date,
-                it.vaccination.certificationIcon,
-                it.vaccination.vaccinationType,
-            )
-        }.toList()
+        val result =
+            group.map {
+                InoculationCertificateResponse(
+                    memberId.toString(),
+                    it.vaccination.id.toString(),
+                    it.vaccination.diseaseName,
+                    it.vaccination.vaccineName,
+                    it.date,
+                    it.vaccination.certificationIcon,
+                    it.vaccination.vaccinationType,
+                )
+            }.toList()
+
+        return when (orderBy) {
+            "dateDesc" -> result.sortedByDescending { it.inoculatedDate }
+            "dateAsc" -> result.sortedBy { it.inoculatedDate }
+            else -> result
+        }
     }
 
     fun getCertificateImage(

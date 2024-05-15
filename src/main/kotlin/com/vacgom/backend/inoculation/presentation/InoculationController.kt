@@ -38,8 +38,9 @@ class InoculationController(
     @GetMapping("/certificate")
     fun getInoculationCertificateResponse(
         @AuthId id: UUID,
+        @RequestParam("orderBy") orderBy: String = "dateDesc",
     ): ResponseEntity<List<InoculationCertificateResponse>> {
-        val certificates = inoculationService.getCertificates(id)
+        val certificates = inoculationService.getCertificates(id, orderBy)
         return ResponseEntity.ok(certificates)
     }
 
@@ -48,7 +49,7 @@ class InoculationController(
         @AuthId id: UUID,
         @PathVariable("vaccineId") vaccineId: String,
     ): ResponseEntity<InoculationCertificateResponse> {
-        val certificates = inoculationService.getCertificates(id)
+        val certificates = inoculationService.getCertificates(id, "dateDesc")
         return ResponseEntity.ok(certificates.filter { it.vaccineId == vaccineId }.first())
     }
 
