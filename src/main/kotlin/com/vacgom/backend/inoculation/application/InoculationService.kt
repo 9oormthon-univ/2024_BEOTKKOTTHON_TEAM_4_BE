@@ -105,9 +105,9 @@ class InoculationService(
                 it.vaccination.vaccineName,
                 it.inoculationOrderString,
                 it.agency,
-                it.lotNumber,
-                it.vaccineName,
-                it.vaccineBrandName,
+                it.lotNumber ?: "로트번호 정보 없음",
+                it.vaccineName ?: "백신명 정보 없음",
+                it.vaccineBrandName ?: "제조사 정보 없음",
                 it.date,
             )
         }.toList()
