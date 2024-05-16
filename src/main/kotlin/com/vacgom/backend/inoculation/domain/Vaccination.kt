@@ -17,6 +17,10 @@ class Vaccination(
     val icon: String,
     @Column(columnDefinition = "VARCHAR(1000)")
     val certificationIcon: String,
+    @Column(columnDefinition = "VARCHAR(1000)")
+    val certificationBackgroundImage: String,
+    @Column(columnDefinition = "VARCHAR(1000)")
+    val certificationMaskImage: String,
     @Enumerated(EnumType.STRING) val vaccinationType: VaccinationType,
 ) : BaseEntity() {
     @Id

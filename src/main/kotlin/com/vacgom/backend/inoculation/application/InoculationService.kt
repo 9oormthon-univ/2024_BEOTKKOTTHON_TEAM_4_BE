@@ -163,7 +163,10 @@ class InoculationService(
             imageGenUrl + "?diseaseName=${inoculation.vaccination.diseaseName}" +
                 "&vaccinationName=${inoculation.vaccination.vaccineName}" +
                 "&inoculationDate=${inoculation.date}" +
-                "&userId=${inoculation.member.nickname?.nickname}",
+                "&userId=${inoculation.member.nickname?.nickname}" +
+                "&cardImageUrl=${inoculation.vaccination.certificationBackgroundImage}" + "" +
+                "&maskImageUrl=${inoculation.vaccination.certificationMaskImage}" +
+                "&iconImageUrl=${inoculation.vaccination.certificationIcon}",
             ByteArray::class.java,
         ) ?: throw BusinessException(GlobalError.GLOBAL_NOT_FOUND)
     }
