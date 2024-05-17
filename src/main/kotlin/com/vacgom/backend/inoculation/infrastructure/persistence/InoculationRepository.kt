@@ -36,6 +36,19 @@ interface InoculationRepository : JpaRepository<Inoculation, UUID> {
     @Query(
         "select i " +
             "from Inoculation i " +
+            "where i.member.id = :memberId and i.vaccination.id = :vaccineId " +
+            "and i.vaccination.vaccinationType = :vaccinationType " +
+            "order by i.date desc",
+    )
+    fun findInoculationsByMemberIdAndVaccinationTypeAndVaccineId(
+        memberId: UUID,
+        vaccinationType: VaccinationType,
+        vaccineId: UUID,
+    ): List<Inoculation>?
+
+    @Query(
+        "select i " +
+            "from Inoculation i " +
             "where i.member.id = :memberId and i.vaccination.diseaseName LIKE %:diseaseName% " +
             "and i.vaccination.vaccinationType = :vaccinationType " +
             "order by i.date desc",

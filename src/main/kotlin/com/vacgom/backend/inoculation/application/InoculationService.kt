@@ -89,15 +89,18 @@ class InoculationService(
     ): List<InoculationDetailResponse> {
         val validatedVaccinationType = VaccinationType.valueOf(vaccinationType.uppercase())
         val inoculations = (
-            inoculationRepository.findInoculationsByMemberIdAndVaccinationTypeAndDiseaseName(
+            inoculationRepository.findInoculationsByMemberIdAndVaccinationTypeAndVaccineId(
                 memberId,
                 validatedVaccinationType,
-                request.name,
+                UUID.fromString(request.vaccineId),
             )
                 ?: throw BusinessException(GlobalError.GLOBAL_NOT_FOUND)
         )
 
         return inoculations.map {
+            println(it.vaccineName.isNullOrEmpty())
+
+            println(it.vaccineName ?: "vaccineName")
             InoculationDetailResponse(
                 it.vaccination.id.toString(),
                 it.vaccination.vaccineName,
