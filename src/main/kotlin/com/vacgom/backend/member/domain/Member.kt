@@ -30,7 +30,7 @@ class Member(
     @OneToMany(mappedBy = "member", cascade = [CascadeType.REMOVE])
     val inoculations: MutableList<Inoculation> = mutableListOf()
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
+    @OneToMany(mappedBy = "member", fetch = FetchType.EAGER, cascade = [CascadeType.ALL], orphanRemoval = true)
     var healthProfiles: MutableList<HealthProfile> = mutableListOf()
 
     @OneToMany(mappedBy = "member", fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
