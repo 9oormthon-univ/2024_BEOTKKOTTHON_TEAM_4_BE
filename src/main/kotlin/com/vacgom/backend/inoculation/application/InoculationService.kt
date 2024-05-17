@@ -106,9 +106,9 @@ class InoculationService(
                 it.vaccination.vaccineName,
                 it.inoculationOrderString,
                 it.agency,
-                it.lotNumber ?: "로트번호 정보 없음",
-                it.vaccineName ?: "백신명 정보 없음",
-                it.vaccineBrandName ?: "제조사 정보 없음",
+                if (it.lotNumber.isNullOrEmpty()) "로트번호 정보 없음" else it.lotNumber,
+                if (it.vaccineName.isNullOrEmpty()) "백신명 정보 없음" else it.vaccineName,
+                if (it.vaccineBrandName.isNullOrEmpty()) "백신 제조사 정보 없음" else it.vaccineBrandName,
                 it.date,
             )
         }.toList()
