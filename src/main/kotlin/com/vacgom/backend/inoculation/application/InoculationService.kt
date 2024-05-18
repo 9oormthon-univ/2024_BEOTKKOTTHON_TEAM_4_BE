@@ -13,6 +13,7 @@ import com.vacgom.backend.inoculation.infrastructure.persistence.InoculationRepo
 import com.vacgom.backend.inoculation.infrastructure.persistence.VaccinationRepository
 import com.vacgom.backend.inoculation.presentation.dto.EventVaccinationRequest
 import com.vacgom.backend.inoculation.presentation.dto.InoculationSimpleRequest
+import com.vacgom.backend.member.domain.Nickname
 import com.vacgom.backend.member.infrastructure.persistence.MemberRepository
 import com.vacgom.backend.notification.application.NotificationService
 import jakarta.transaction.Transactional
@@ -174,9 +175,9 @@ class InoculationService(
 
     fun addEventInoculation(eventVaccinationRequest: EventVaccinationRequest) {
         val member =
-            memberRepository.findById(UUID.fromString(eventVaccinationRequest.userId))
-                .orElseThrow { BusinessException(GlobalError.GLOBAL_NOT_FOUND) }
-
+            memberRepository.findMemberByNickname(
+                Nickname(eventVaccinationRequest.userId),
+            ) ?: throw BusinessException(GlobalError.GLOBAL_NOT_FOUND)
         val eventVaccination =
             vaccinationRepository.findById(UUID.fromString("3e1065ab-e785-11ee-9d8f-0e9be882b70f"))
                 .orElseThrow { BusinessException(GlobalError.GLOBAL_NOT_FOUND) }
