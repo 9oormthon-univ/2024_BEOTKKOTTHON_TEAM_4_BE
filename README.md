@@ -6,7 +6,7 @@
 # 💉 우리 아이 백신 접종을 위한 백신 조회 및 추천 서비스, 백곰 🐻‍❄️
 
 우리 아이 백신 접종을 위한 종합적인 서비스를 제공하는 백곰 : 백신아, 곰아워 🐻‍❄️ 팀의 백엔드 개발 저장소입니다. <br>
-현재 V2를 준비중이, 2025년 01월 실제 앱 서비스로 배포를 목표로 하고 있습니다.
+현재 V2를 준비중이며, 2025년 01월 실제 앱 서비스로 배포를 목표로 하고 있습니다.
 
 ![](https://github.com/goormthon-Univ/2024_BEOTKKOTTHON_TEAM_4_FE/assets/53892427/c89039ca-a866-452c-b372-79537abbc4d0)
 
@@ -22,26 +22,26 @@
     <th style="text-align: center;">BE</th>
   </tr>
   <tr>
-    <td style="text-align: center;">
+    <td align="center">
       <img style="width: 200px;" src="https://avatars.githubusercontent.com/u/112257466?v=4" />
     </td>
-    <td style="text-align: center;">
+    <td align="center">
       <img style="width: 200px;" src="https://avatars.githubusercontent.com/u/9509286?v=4" />
     </td>
   </tr>
   <tr>
-    <td style="text-align: center;">경기대학교</td>
-    <td style="text-align: center;">부산대학교</td>
+    <td align="center">경기대학교</td>
+    <td align="center">부산대학교</td>
   </tr>
   <tr>
-    <td style="text-align: center;">변해빈</td>
-    <td style="text-align: center;">성형주</td>
+    <td align="center">변해빈</td>
+    <td align="center">성형주</td>
   </tr>
   <tr>
-    <td style="text-align: center;">
+    <td align="center">
       <a href="https://github.com/h-beeen">@h-beeen</a>
     </td>
-    <td style="text-align: center;">
+    <td align="center">
       <a href="https://github.com/HyungJu">@HyungJu</a>
     </td>
   </tr>
