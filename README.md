@@ -1,5 +1,10 @@
 >  kakao X goorm 2024 벚꽃톤 최우수상 수상 서비스 🏆<br>
->  kakao X goorm 2024 구름톤유니브 In Jeju 우수상 수상작 🏆 
+>  kakao X goorm 2024 구름톤유니브 In Jeju 우수상 수상작 🏆<br>
+>  kakao X goorm [DEEPDIVE 우수사례 소개](https://deepdive.goorm.io/4f838374-1a46-4f2d-852b-3915b336c76c)<br>
+>  [백곰 한국경제 신문 보도](https://www.hankyung.com/article/202404260197i)
+
+<br>
+<br>
 
 <div align="center">
   <img src="https://github.com/user-attachments/assets/153f2cdc-b9d1-43ea-b3f1-266697450920" height=230px>
